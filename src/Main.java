@@ -286,7 +286,7 @@ public class Main {
 
         totalTraining += completed;
 
-        System.out.println("\nTraining complete!");
+        System.out.println("\nTraining complete !");
         System.out.println("Your level is now " + p.level);
 
         if (totalTraining >= limit) {
