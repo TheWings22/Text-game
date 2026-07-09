@@ -45,6 +45,7 @@ public class Main {
     static boolean WindRing = false;
     static boolean East = false;
     static boolean West = false;
+    static boolean TrainingCap = false;
 
     static boolean EastAccess = true;
     static boolean SouthAccess = true;
@@ -99,7 +100,7 @@ public class Main {
             System.out.flush();
 
             try {
-                Thread.sleep(15); // adjust speed here
+                Thread.sleep(30); // adjust speed here
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -207,9 +208,9 @@ public class Main {
             System.out.println("=================================");
             System.out.println("You have succumbed to your situation... As you let the cold embrace of death to take you");
             System.out.println("Do you give up? Or restart");
-            System.out.println("Y or N");
+            System.out.println("Give Up or Restart (G|R)");
             char choice = input.next().charAt(0);
-            if (choice == 'Y' || choice == 'y') {
+            if (choice == 'R' || choice == 'r') {
 
                 p.health = 100.0;
                 p.bonusDefense = 0;
@@ -227,7 +228,7 @@ public class Main {
 //endregion
 
 
-//region TrainingTimer
+//region Timer
 
     static int runTimer(String action, int seconds) {
 
@@ -245,15 +246,6 @@ public class Main {
         System.out.println();
         return seconds;
     }
-
-    static void sleep() {
-
-        System.out.println("You have exhausted yourself, you laydown under a tree and sleep ");
-
-        runTimer("Sleeping", 20);
-
-        System.out.println("You wake up fully rested and head back to the main area.");
-    }
 //endregion
 
 
@@ -261,23 +253,14 @@ public class Main {
 
     static void Training() {
 
-        System.out.print("How many minutes do you want to train for? ");
-        int minutes = input.nextInt();
+        if (TrainingCap) {
+            System.out.println("The training grounds in inaccessible, come back later");
+            mainArea();
+        }
 
         System.out.println("You begin training...");
 
-        int limit = 180;
-
-        // stop early if it would exceed limit
-        if (totalTraining + minutes >= limit) {
-
-            int allowed = limit - totalTraining;
-
-            System.out.println("You are too tired to train that long!");
-            System.out.println("You can only train for " + allowed + " more minutes.");
-
-            minutes = allowed;
-        }
+        int minutes = 20;
 
         int completed = runTimer("Training", minutes);
 
@@ -289,10 +272,7 @@ public class Main {
         System.out.println("\nTraining complete!");
         System.out.println("Your level is now " + p.level);
 
-        if (totalTraining >= limit) {
-            totalTraining = 0;
-            sleep();
-        }
+        TrainingCap = true;
 
         mainArea();
     }
@@ -479,6 +459,7 @@ public class Main {
         p.level += 10;
         p.crystals += 1;
         North = true;
+        TrainingCap = false;
         mainArea();
 
     }
@@ -521,6 +502,7 @@ public class Main {
                 "Collect 3 pieces of the broken ring of Wind, assemble it and you have the crystal\"\n" +
                 "\"What do you say?\"\n" +
                 "You accepted the challenge and set off");
+        typeWriter("After your encounter with the wind god Aeolus you venture off to find the missing ring pieces");
         CloudCrossway();
     }
 
@@ -530,8 +512,7 @@ public class Main {
             WindRing = true;
             Aeolus();
         }
-        typeWriter("After your encounter with the wind god Aeolus you venture off to find the missing ring pieces \n" +
-                "You land at a cloud plateau, in front of you are three large clouds \n" +
+        typeWriter("You land at a cloud plateau, in front of you are three large clouds \n" +
                 "To the left is a large ivory castle. The center is a cloud adorned with rainbows. And to the left is a dark storm cloud.");
         System.out.println("Which cloud do you choose? (left, center, right) ");
         char Cloud = input.next().charAt(0);
@@ -562,7 +543,7 @@ public class Main {
         System.out.println("Enter the 3 digit combination, enter 0 to head back and look for clues");
         int digit = input.nextInt();
 
-        if (digit == 576) {
+        if (digit == 578) {
             typeWriter("The door opened, the ground shook by the colossal door, as you entered the chamber");
             ThroneRoom();
         } else if (digit == 0) {
@@ -591,22 +572,78 @@ public class Main {
     }
 
     static void IvoryLeft() {
-        typeWriter("You took the left staircase, you stand in front of a room, inside there is a statue that looks like a witch, with a sign that reads \n" +
-                " \"I am many in the night sky, Twinkling above, I watch over you when I sleep, I am used for magic and represent spirit, air, water, earth, and fir. What number am I?\"");
+        typeWriter("You take the left staircase and you see a room, above the door is the number 1. Would you like to explore the room more or go to the statue at the center?");
+        System.out.println("1. Explore the room more | 2. Go to the statue at the center");
+        int choice = input.nextInt();
+        switch (choice) {
+            case 1 -> IvoryLeftRoom();
+            case 2 -> IvoryLeftStatue();
+        }
+    }
+
+    private static void IvoryLeftRoom() {
+
+        typeWriter("The room is dark, only lit up by candles on the walls, on the walls there are paintings of symbols \n" +
+                "runes, sigils, and other random symbols, you feel an odd energy coming from them \n" +
+                "The ceiling is painted to be the night sky, with stars and constellations shimmering and sparkling");
+        IvoryLeftStatue();
+    }
+
+    static void IvoryLeftStatue() {
+        typeWriter("The statue looks like a witch, under it, it looks like a summoning circle, with a sign that reads \n" +
+                " \"I am many in the night sky, Twinkling above, I watch over you when I sleep, I am used for magic and connect the elements. What number am I?\"");
         System.out.println("You head back to the grand hall");
         IvoryHall();
     }
+
 
     static void IvoryCenter() {
-        typeWriter("You took the center staircase, you stand in front of a room, inside there is a statue that looks like a man with a sword, with a sign that reads \n" +
-                " \"I raise my sword up north, the son of the sea, I watch over the earth day and night high up in the heavens. What number am I?\"");
+        typeWriter("You take the center staircase and you see a room, above the door is the number 2. Would you like to explore the room more or go to the statue at the center?");
+        System.out.println("1. Explore the room more | 2. Go to the statue at the center");
+        int choice = input.nextInt();
+        switch (choice) {
+            case 1 -> IvoryCenterRoom();
+            case 2 -> IvoryCenterStatue();
+        }
+    }
+
+    static void IvoryCenterRoom() {
+
+        typeWriter("The room is cold, chilly even, the walls have stars all over, bright and shimmering, the ceiling painted like a galaxy \n" +
+                "On the walls are painting of 2 twin bears in dance, one bigger and one smaller, near the tail of the smaller bear is a bright point \n" +
+                "The back wall has a giant glowing star high up");
+        IvoryCenterStatue();
+    }
+
+    static void IvoryCenterStatue() {
+        typeWriter("The statue in the center look like of 2 twins, one older one younger, draped in bear fur. On it a sign reads\n" +
+                " \"I sleep in the heavens with my little brother\" \t \"I sleep in the heavens with my great brother\" " +
+                " \"I shine bright with points in the night sky\" \t \"I help people point at north, what number am I?\"");
         System.out.println("You head back to the grand hall");
         IvoryHall();
     }
 
+
     static void IvoryRight() {
-        typeWriter("You took the right staircase, you stand in front of a room, inside there is a statue of the vermin god, with a sign that reads \n" +
-                " \"I am the lady of insects. I have eyes that see and legs that walk. What number am I?\"");
+        typeWriter("You take the right staircase and you see a room, above the door is the number 3. Would you like to explore the room more or go to the statue at the center?");
+        System.out.println("1. Explore the room more | 2. Go to the statue at the center");
+        int choice = input.nextInt();
+        switch (choice) {
+            case 1 -> IvoryRightRoom();
+            case 2 -> IvoryRightStatue();
+        }
+    }
+
+    private static void IvoryRightRoom() {
+        typeWriter("The room is humid air thick with the smell of rain and mud, on the wall are framed taxidermy insects \n" +
+                "The walls are also filled with polkadots of red and black, on one of the corner lies a ball of yarn and string");
+        IvoryRightStatue();
+    }
+
+    static void IvoryRightStatue() {
+        typeWriter("The statue looks like the vermin god, covered with insects of all shaped, adorned with a crown of butterfly wings, with a sign that reads \n" +
+                " \"I am the lady of bugs, and have many legs to help me walk.\" \n" +
+                " \"I am the weave maker of the word and have many eyes that help me see. What number am I?\"");
         System.out.println("You head back to the grand hall");
         IvoryHall();
     }
@@ -620,11 +657,133 @@ public class Main {
         System.out.println("Your damage is now " + p.damage);
         System.out.println("Your defense is now " + p.defense);
         typeWriter("you continue inside and made it to the throne room. On the throne is one of the ring pieces, but it's protected by " + Breeze + "Breezes");
-        typeWriter("You beavery lifted your new sword and fought them");
-        Ivoryttack();
+        typeWriter("Do you attack them? Distract them, or they and sneak around them");
+        System.out.println("1 Attack them | 2 distract them | 3 Run");
+        int choice = input.nextInt();
+        switch (choice) {
+            case 1 -> {
+                typeWriter("You beavery lifted your new sword and fought them");
+                IvoryAttack();
+            }
+            case 2 -> {
+                typeWriter("You attempted to distract them but the Breezes weren't fooled by you, you take extra damage");
+                IvoryDistract();
+            }
+            case 3 -> {
+                typeWriter("You attempted to run but the Breezes caught you and attacked you, you take extra damage");
+                IvoryRun();
+            }
+        }
+        char attack = input.next().charAt(0);
+
+
     }
 
-    static void Ivoryttack() {
+    static void IvoryDistract() {
+
+        System.out.println("You attack the Breezes!");
+
+        for (int i = 0; i < Breeze; i++) {
+
+            enemy.Breeze = 40;
+
+            System.out.println("\nFighting Breezes " + (i + 1));
+
+            while (enemy.Breeze > 0) {
+
+                // player attacks
+                enemy.Breeze -= p.damage;
+
+                String line =
+                        "Breeze HP: " + enemy.Breeze +
+                                " | Your HP: " + String.format("%.1f", p.health);
+
+                System.out.print("\r" + String.format("%-50s", line));
+                System.out.flush();
+
+                // if dead, stop BEFORE enemy turn
+                if (enemy.Breeze <= 0) {
+                    break;
+                }
+
+                // enemy attack only if still alive
+                takeDamage(3.5);
+
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                checkHealth();
+            }
+
+            System.out.println("\nBreeze defeated!");
+        }
+
+        System.out.println("\nYou survived, your health is now " + p.health);
+        typeWriter("You obtained the missing ring piece, you head back to the cloud plateau to find the other missing pieces");
+
+        IvoryCastle = true;
+        p.WindRing += 1;
+        System.out.println("Wind Ring pieces are now " + p.WindRing + "\\3");
+        checkHealth();
+        CloudCrossway();
+    }
+
+    static void IvoryRun() {
+
+        System.out.println("You attack the Breezes!");
+
+        for (int i = 0; i < Breeze; i++) {
+
+            enemy.Breeze = 40;
+
+            System.out.println("\nFighting Breezes " + (i + 1));
+
+            while (enemy.Breeze > 0) {
+
+                // player attacks
+                enemy.Breeze -= p.damage;
+
+                String line =
+                        "Breeze HP: " + enemy.Breeze +
+                                " | Your HP: " + String.format("%.1f", p.health);
+
+                System.out.print("\r" + String.format("%-50s", line));
+                System.out.flush();
+
+                // if dead, stop BEFORE enemy turn
+                if (enemy.Breeze <= 0) {
+                    break;
+                }
+
+                // enemy attack only if still alive
+                takeDamage(3);
+
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                checkHealth();
+            }
+
+            System.out.println("\nBreeze defeated!");
+        }
+
+        System.out.println("\nYou survived, your health is now " + p.health);
+        typeWriter("You obtained the missing ring piece, you head back to the cloud plateau to find the other missing pieces");
+
+        IvoryCastle = true;
+        p.WindRing += 1;
+        System.out.println("Wind Ring pieces are now " + p.WindRing + "\\3");
+        checkHealth();
+        CloudCrossway();
+    }
+
+    static void IvoryAttack() {
 
         System.out.println("You bravely attack the Breezes!");
 
@@ -1028,6 +1187,7 @@ public class Main {
         p.health = 100;
         East = true;
         SouthAccess = true;
+        TrainingCap = false;
         mainArea();
     }
 
