@@ -1,6 +1,8 @@
 import java.util.Scanner;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 class Enemy {
     int CrystalHunters = 20;
@@ -23,6 +25,8 @@ class Player {
     int bonusDefense = 0;
     int defense = 0;
     int Money = 0;
+    int ElationCoin = 0;
+    int MaskOfElation = 0;
 }
 
 public class Main {
@@ -46,6 +50,11 @@ public class Main {
     static boolean East = false;
     static boolean West = false;
     static boolean TrainingCap = false;
+    static boolean Flowery = true;
+    static boolean CaveShop = true;
+    static boolean CaveShopHint = true;
+    static boolean playerResponded = false;
+    static boolean secretTriggered = false;
 
     static boolean EastAccess = true;
     static boolean SouthAccess = true;
@@ -100,7 +109,7 @@ public class Main {
             System.out.flush();
 
             try {
-                Thread.sleep(30); // adjust speed here
+                Thread.sleep(0); // adjust speed here
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -110,7 +119,295 @@ public class Main {
     //endregion
 
 
-//region main class
+//region EastCode
+
+    static int Room1 = random.nextInt(10);
+    static int Room2 = random.nextInt(10);
+    static int Room3 = random.nextInt(10);
+
+    static int EastCode = Integer.parseInt(Room1 + "" + Room2 + "" + Room3);
+
+
+    //endregion
+
+
+//region EastRooms
+
+    private static void EastRooms(int roomNumber) {
+        int Room = roomNumber;
+
+        switch (Room) {
+            case 0:
+                Room0();
+                break;
+            case 1:
+                Room1();
+                break;
+            case 2:
+                Room2();
+                break;
+            case 3:
+                Room3();
+                break;
+            case 4:
+                Room4();
+                break;
+            case 5:
+                Room5();
+                break;
+            case 6:
+                Room6();
+                break;
+            case 7:
+                Room7();
+                break;
+            case 8:
+                Room8();
+                break;
+            case 9:
+                Room9();
+                break;
+        }
+    }
+
+    private static void Room0() {
+        System.out.println("1. Explore the room | 2. Go to the statue");
+        int choice = input.nextInt();
+        if (choice == 1) {
+            Room0Explore();
+        } else if (choice == 2) {
+            Room0Statue();
+        }
+    }
+    private static void Room0Explore() {
+
+        typeWriter("The room feels cold, desolate and quite, darkness fills your every vision");
+        Room0Statue();
+    }
+    private static void Room0Statue() {
+        typeWriter("The statue of a warrior draped in black and white cloth, a sword on their hips, on it a sign reads");
+        typeWriter("\"Now I have become death the destroyer of worlds, I am the enemy of life, I am the end of all things, the Nihility to Beauty\"\n" +
+                "What number am I?");
+        IvoryHall();
+    }
+
+    private static void Room1() {
+
+        System.out.println("1. Explore the room | 2. Go to the statue");
+        int choice = input.nextInt();
+        if (choice == 1) {
+            Room1Explore();
+        } else if (choice == 2) {
+            Room1Statue();
+        }
+    }
+    private static void Room1Explore() {
+
+        typeWriter("The room is adored in renaissance celestial imagery. Rich blue walls and shimmering golden stars \n" +
+                "On the back wall lies a small soft flowing waterfall");
+        Room1Statue();
+    }
+    private static void Room1Statue() {
+        typeWriter("The statue is of a beautiful silver women, on it a sign reads");
+        typeWriter("\" I watch from the heavens, guiding all lost souls under the coven of night.\" \n" +
+                "\"I come and go, appear and disappear, as I push and pull the oceans\" \n" +
+                "What number am I?");
+        IvoryHall();
+    }
+
+    private static void Room2() {
+
+        System.out.println("1. Explore the room | 2. Go to the statue");
+        int choice = input.nextInt();
+        if (choice == 1) {
+            Room2Explore();
+        } else if (choice == 2) {
+            Room2Statue();
+        }
+    }
+    private static void Room2Explore() {
+
+        typeWriter("The room is adored in renaissance celestial imagery. Rich blue walls and shimmering golden stars \n");
+        Room2Statue();
+    }
+    private static void Room2Statue() {
+        typeWriter("The statue are twin warriors, one in silver, one in gold, their blade's intertwined with each other\n" +
+                "On it a sign reads");
+        typeWriter("\"I am the sun, and I am the moon, I am Yin and I am Yang, I govern the balance of life, the passion of love\"\n" +
+                "What number am I?");
+        IvoryHall();
+    }
+
+    private static void Room3() {
+
+        System.out.println("1. Explore the room | 2. Go to the statue");
+        int choice = input.nextInt();
+        if (choice == 1) {
+            Room3Explore();
+        } else if (choice == 2) {
+            Room3Statue();
+        }
+    }
+    private static void Room3Explore() {
+
+        typeWriter("The room is cold, the walls dazzle with ice crystals, the ceiling painted with many moons\n" +
+                "Some full, some crescents, some gibbous");
+        Room3Statue();
+    }
+    private static void Room3Statue() {
+        typeWriter("The statue is an old witch, her hat long and crooked");
+        typeWriter("\"I play like the Maiden, I love like the Mother, and I think like the Crone, I am the circle of life and the interconnectedness of nature\"\n" +
+                "What number am I?");
+        IvoryHall();
+    }
+
+    private static void Room4() {
+
+        System.out.println("1. Explore the room | 2. Go to the statue");
+        int choice = input.nextInt();
+        if (choice == 1) {
+            Room4Explore();
+        } else if (choice == 2) {
+            Room4Statue();
+        }
+
+    }
+    private static void Room4Explore() {
+
+        typeWriter("The room is humid, wooden planks adorn the walls, seashells and rocks scattered around, and compass lying around");
+        Room4Statue();
+    }
+    private static void Room4Statue() {
+        typeWriter("The statue looks like a pirate, a hand holding a compass, and the other planting a flag, the sign reads");
+        typeWriter("\"I travel the sea with the sky, I use the little dipper to find treasure\"\n" +
+                "I use the Crux to find land, and I use the sun's birth and death to find my bearings\"\n" +
+                "What number am I?");
+        IvoryHall();
+    }
+
+    private static void Room5() {
+        System.out.println("1. Explore the room | 2. Go to the statue");
+        int choice = input.nextInt();
+        if (choice == 1) {
+            Room5Explore();
+        } else if (choice == 2) {
+            Room5Statue();
+        }
+    }
+    private static void Room5Explore() {
+        typeWriter("The room is dark, only lit up by candles on the walls, on the walls there are paintings of symbols \n" +
+                "runes, sigils, and other random symbols, you feel an odd energy coming from them \n" +
+                "The ceiling is painted to be the night sky, with stars and constellations shimmering and sparkling");
+        Room5Statue();
+
+    }
+    private static void Room5Statue() {
+        typeWriter("The statue looks like a witch, under it, it looks like a summoning circle, with a sign that reads \n" +
+                " \"I am many in the night sky, Twinkling above, I watch over you when I sleep, I am used for magic and connect the elements. What number am I?\"");
+        IvoryHall();
+    }
+
+    private static void Room6() {
+
+        System.out.println("1. Explore the room | 2. Go to the statue");
+        int choice = input.nextInt();
+        if (choice == 1) {
+            Room6Explore();
+        } else if (choice == 2) {
+            Room6Statue();
+        }
+    }
+    private static void Room6Explore() {
+
+        typeWriter("The room is adorned with neon lights flashing, playing cards, poker chips, and dices lying around\n");
+        Room6Statue();
+    }
+    private static void Room6Statue() {
+
+        typeWriter("The statue is a handsome man in a suit, a hat covering his face, a comedy mask hanging from his fingers, he sign reads");
+        typeWriter("\"I cast the dice of fate, I laugh at the face of sadness and cry at the face of laughter, I am elation and I am chance\"\n" +
+                "\"What side of dice you'll get who knows?\" What number am I? ");
+        IvoryHall();
+    }
+
+    private static void Room7() {
+
+        System.out.println("1. Explore the room | 2. Go to the statue");
+        int choice = input.nextInt();
+        if (choice == 1) {
+            Room7Explore();
+        } else if (choice == 2) {
+            Room7Statue();
+        }
+
+    }
+    private static void Room7Explore() {
+
+        typeWriter("The room is cold, chilly even, the walls have stars all over, bright and shimmering, the ceiling painted like a galaxy \n" +
+                "On the walls are painting of 2 twin bears in dance, one bigger and one smaller, near the tail of the smaller bear is a bright point \n" +
+                "The back wall has a giant glowing star high up");
+        Room7Statue();
+    }
+    private static void Room7Statue() {
+        typeWriter("The statue in the center look like of 2 twins, one older one younger, draped in bear fur. On it a sign reads\n" +
+                " \"I sleep in the heavens with my little brother\" \t \"I sleep in the heavens with my great brother\" " +
+                " \"I shine bright with points in the night sky\" \t \"I help people point at north, what number am I?\"");
+        IvoryHall();
+    }
+
+    private static void Room8() {
+
+        System.out.println("1. Explore the room | 2. Go to the statue");
+        int choice = input.nextInt();
+        if (choice == 1) {
+            Room8Explore();
+        } else if (choice == 2) {
+            Room8Statue();
+        }
+
+    }
+    private static void Room8Explore() {
+
+        typeWriter("The room is humid air thick with the smell of rain and mud, on the wall are framed taxidermy insects \n" +
+                "The walls and ceiling are covered in a tapestry of interlinked string and yarn");
+        Room8Statue();
+
+    }
+    private static void Room8Statue() {
+        typeWriter("The statue looks like the vermin god, covered with insects of all shaped, adorned with a crown of butterfly wings, with a sign that reads \n" +
+                " \"I am the spinner of fate, I have many legs to help me walk.\" \n" +
+                " \"I am the weave maker of the word and have many eyes that help me see. What number am I?\"");
+        IvoryHall();
+    }
+
+    private static void Room9() {
+
+        System.out.println("1. Explore the room | 2. Go to the statue");
+        int choice = input.nextInt();
+        if (choice == 1) {
+            Room9Explore();
+        } else if (choice == 2) {
+            Room9Statue();
+        }
+    }
+    private static void Room9Explore() {
+
+        typeWriter("The room smells of lavender and vanilla, yarn balls and catnip lying everywhere");
+        Room9Statue();
+    }
+    private static void Room9Statue() {
+
+        typeWriter("The statue is a cat, sitting on a pile of yarn balls, a sign reads");
+        typeWriter("\"I represent death, and magic, I always leave but I comeback everytime\"\n" +
+                "What number am I?");
+        IvoryHall();
+    }
+
+
+    //endregion
+
+
+    //region main class
     public static void main(String[] args) {
         System.setOut(new java.io.PrintStream(System.out, true));
 
@@ -120,6 +417,9 @@ public class Main {
         p.WindRing = 0;
         p.BreezeHearts = 0;
         p.Money = 0;
+        p.ElationCoin = 0;
+        p.MaskOfElation = 0;
+
 
         System.out.print("Please enter your name young traveller: ");
         p.name = input.nextLine();
@@ -143,7 +443,7 @@ public class Main {
 //endregion
 
 
-//region Main Area
+    //region Main Area
     static void mainArea() {
 
         System.out.println("\n**********************************************\n");
@@ -200,7 +500,7 @@ public class Main {
     //endregion
 
 
-//region death
+    //region death
     static void checkHealth() {
         if (p.health <= 0) {
             System.out.println();
@@ -228,6 +528,35 @@ public class Main {
 
 //endregion
 
+    static class TimedScanner {
+
+        private String input = null;
+
+        public String readLine(int seconds) {
+
+            Thread inputThread = new Thread(() -> {
+                Scanner tempScanner = new Scanner(System.in);
+                input = tempScanner.nextLine();
+            });
+
+            inputThread.start();
+
+
+            try {
+                inputThread.join(seconds * 1000);
+
+            } catch (InterruptedException e) {
+
+            }
+
+
+            if (input == null) {
+                return null; // no input received
+            }
+
+            return input;
+        }
+    }
 
 //region Timer
 
@@ -357,6 +686,22 @@ public class Main {
             }
 
             System.out.println("\nHunter defeated!");
+
+            if (ThreadLocalRandom.current().nextInt(100) < 50) {
+
+                int intervals = 3;
+
+                int randomValue = (random.nextInt(intervals) + 1) * 5;
+
+                p.Money += randomValue;
+
+                System.out.println("Hunter dropped " + randomValue + " coins");
+
+
+
+            } else {
+            }
+
         }
 
         System.out.println("\nYou survived, your health is now " + p.health);
@@ -431,12 +776,182 @@ public class Main {
     }
 
     static void LeftCave() {
-        typeWriter("you traversed the dark cave, whispers echoed across the walls, you felt a cold breeze and a shiver ran down your spine \n" +
-                "Suddenly you were ambushed by a group of shadow creatures, they attacked you and you took damage");
-        p.health -= 80;
-        System.out.println("Your health is now  " + p.health);
-        checkHealth();
-        typeWriter("You quickly went back to the crossroad");
+        if (CaveShop) {
+            typeWriter("you traversed the dark cave, whispers echoed across the walls, you felt a cold breeze and a shiver ran down your spine \n" +
+                    "You felt the looming present of an entity, you thought it was an enemy but then the lights came on and it was just a mannequin \n" +
+                    "In front of you lies a small shop, the shopkeeper having a kind face");
+            typeWriter("\"Oh sorry there traveler, I didn't mean to scare you, I was just fixing the lights hehe\"");
+
+            CaveShopFirstTime();
+        }
+        CaveShopFirstTime();
+    }
+
+
+    static void CaveShopFirstTime() {
+
+        if (CaveShopHint) {
+
+            typeWriter("\"Is there anything of interest I could be of use to you?\"");
+            System.out.println("| 1 talk | 2 buy items | 3 leave shop ");
+
+
+            TimedScanner timed = new TimedScanner();
+
+            String answer = timed.readLine(60);
+
+
+            if (answer == null) {
+                typeWriter("...");
+                SecretBossHint();
+                return;
+            }
+
+
+            int choice = Integer.parseInt(answer);
+
+
+            switch (choice) {
+
+                case 1 -> ShopTalk();
+
+                case 2 -> ShopBuy();
+
+                case 3 -> cave2();
+
+                default -> {
+                    System.out.println("Invalid choice.");
+                    CaveShopFirstTime();
+                }
+            }
+
+
+            CaveShopHint = false;
+
+        } else {
+
+            CaveShop();
+
+        }
+    }
+
+
+    static void CaveShop() {
+        typeWriter("\"Is there anything of interest I could be of use to you?\"");
+        System.out.println("| 1 talk | 2 buy items | 3 leave shop ");
+        int choice = input.nextInt();
+        switch (choice) {
+            case 1 -> ShopTalk();
+            case 2 -> ShopBuy();
+            case 3 -> {
+                typeWriter("\"Take care\"");
+                cave2();
+            }
+            default -> {
+                System.out.println("Invalid choice.");
+                CaveShop();
+            }
+        }
+
+    }
+
+    static void ShopTalk() {
+        typeWriter("\"What do you want to talk about?\"");
+        System.out.println("| 1 What is this place? | 2 Who are you? | 3 How do I get out | 4 How do I get more money |5 go back");
+        int choice = input.nextInt();
+        switch (choice) {
+            case 1 -> {
+                typeWriter("\"This world was created by twins... At least that's what he says, no one has seen the other, even the history books didn't cover it hehe\"\n" +
+                        "\"Why don't you ask him yourself for why they created this world");
+                ShopTalk();
+            }
+            case 2 -> {
+                typeWriter("\"Who me? Hehe, I am just a shopkeeper, that's all I am, nothing much");
+                ShopTalk();
+            }
+            case 3 -> {
+                typeWriter("\"To get out, you need to find special crystals scattered throughout this world. They will help unlock the dark fountain and ultimately send you back.\"");
+                ShopTalk();
+            }
+            case 4 -> {
+                typeWriter("\"Past my shop in the center passages there should be a civilisation of gnomes, you could ask them for money... or steal it hehe");
+                ShopTalk();
+            }
+            case 5 -> {
+                CaveShop();
+            }
+            default -> {
+                System.out.println("Invalid choice.");
+                ShopTalk();
+            }
+        }
+    }
+
+    static void ShopBuy() {
+        typeWriter("\"What do you need?\"");
+        System.out.println("| 1 Buy wooden sword (10 Money | +5 dmg) | 2 Buy wooden armor (20 Money | +15 def) | 3 Go back");
+        System.out.println("Your money is: " + p.Money);
+        int choice = input.nextInt();
+        switch (choice) {
+            case 1 -> {
+                if (p.Money >= 10) {
+                    p.Money -= 10;
+                    p.bonusDamage += 5;
+                    System.out.println("You bought the wooden sword.");
+                } else {
+                    System.out.println("You don't have enough money.");
+                }
+                ShopBuy();
+            }
+            case 2 -> {
+                if (p.Money >= 20) {
+                    p.Money -= 20;
+                    p.bonusDefense += 15;
+                    System.out.println("You bought the wooden armor.");
+                } else {
+                    System.out.println("You don't have enough money.");
+                }
+                ShopBuy();
+            }
+            case 3 -> CaveShop();
+            default -> {
+                System.out.println("Invalid choice.");
+                ShopBuy();
+            }
+        }
+    }
+
+
+    static void SecretBossHint() {
+        typeWriter("\"Oh.... oh I know what you want... You don't care about the vanity of this word\"\n" +
+                "\"Hehe... a kindred spirit. Take this coin of Elation, show it to the bartender at the world's edge tavern, he should give you all that you need... Take care\"");
+        p.ElationCoin = 1;
+        typeWriter("Coin of Elation was added to your inventory");
+        CaveShopHint = false;
+        CaveShop();
+    }
+
+
+    static void RightCave() {
+        if (Flowery) {
+            typeWriter("You entered the right cave, the sound of running water grew louder as you ventured deeper \n" +
+                    "You found a small pond with a glowing flower in the center \n" +
+                    "You stepped closer, the flower pulsed as it healed you fully.... But you could almost hear the flower say something");
+            typeWriter("......glue.......");
+            p.health = 100;
+            Flowery = false;
+            System.out.println("Your health is now: " + p.health);
+            typeWriter("You went back to the crossroad");
+            cave2();
+        }
+        typeWriter("You entered the right cave, the sound of running water grew louder as you ventured deeper \n" +
+                "You found a small pond with a glowing flower in the center \n" +
+                "You stepped closer, the flower pulsed as it healed you fully");
+        p.health = 100;
+
+
+        System.out.println("Your health is now: " + p.health);
+        typeWriter("You went back to the crossroad");
         cave2();
     }
 
@@ -472,22 +987,12 @@ public class Main {
         checkHealth();
     }
 
-    static void RightCave() {
-        typeWriter("You entered the right cave, the sound of running water grew louder as you ventured deeper \n" +
-                "You found a small pond with a glowing flower in the center \n" +
-                "You stepped closer, the flower pulsed as it healed you fully.... But you could almost hear the flower say something");
-        typeWriter("......glue.......");
-        p.health = 100;
-        System.out.println("Your health is now: " + p.health);
-        typeWriter("You went back to the crossroad");
-        cave2();
-    }
 
 
 //endregion
 
 
-//region east
+    //region east
     static void wind() {
         if (EastAccess) {
             System.out.println("You are too weak to go east yet. You need to explore the north first.");
@@ -545,11 +1050,10 @@ public class Main {
         System.out.println("Enter the 3 digit combination, enter 0 to head back and look for clues");
         int digit = input.nextInt();
 
-        if (digit == 578) {
+        if (digit == EastCode) {
             typeWriter("The door opened, the ground shook by the colossal door, as you entered the chamber");
             ThroneRoom();
         } else if (digit == 0) {
-            typeWriter("You head back");
             IvoryHall();
         } else
             System.out.println("Wrong combination");
@@ -573,81 +1077,22 @@ public class Main {
         }
     }
 
+
     static void IvoryLeft() {
         typeWriter("You take the left staircase and you see a room, above the door is the number 1. Would you like to explore the room more or go to the statue at the center?");
-        System.out.println("1. Explore the room more | 2. Go to the statue at the center");
-        int choice = input.nextInt();
-        switch (choice) {
-            case 1 -> IvoryLeftRoom();
-            case 2 -> IvoryLeftStatue();
-        }
+        EastRooms(Room1);
+
     }
-
-    private static void IvoryLeftRoom() {
-
-        typeWriter("The room is dark, only lit up by candles on the walls, on the walls there are paintings of symbols \n" +
-                "runes, sigils, and other random symbols, you feel an odd energy coming from them \n" +
-                "The ceiling is painted to be the night sky, with stars and constellations shimmering and sparkling");
-        IvoryLeftStatue();
-    }
-
-    static void IvoryLeftStatue() {
-        typeWriter("The statue looks like a witch, under it, it looks like a summoning circle, with a sign that reads \n" +
-                " \"I am many in the night sky, Twinkling above, I watch over you when I sleep, I am used for magic and connect the elements. What number am I?\"");
-        System.out.println("You head back to the grand hall");
-        IvoryHall();
-    }
-
 
     static void IvoryCenter() {
         typeWriter("You take the center staircase and you see a room, above the door is the number 2. Would you like to explore the room more or go to the statue at the center?");
-        System.out.println("1. Explore the room more | 2. Go to the statue at the center");
-        int choice = input.nextInt();
-        switch (choice) {
-            case 1 -> IvoryCenterRoom();
-            case 2 -> IvoryCenterStatue();
-        }
+        EastRooms(Room2);
+
     }
-
-    static void IvoryCenterRoom() {
-
-        typeWriter("The room is cold, chilly even, the walls have stars all over, bright and shimmering, the ceiling painted like a galaxy \n" +
-                "On the walls are painting of 2 twin bears in dance, one bigger and one smaller, near the tail of the smaller bear is a bright point \n" +
-                "The back wall has a giant glowing star high up");
-        IvoryCenterStatue();
-    }
-
-    static void IvoryCenterStatue() {
-        typeWriter("The statue in the center look like of 2 twins, one older one younger, draped in bear fur. On it a sign reads\n" +
-                " \"I sleep in the heavens with my little brother\" \t \"I sleep in the heavens with my great brother\" " +
-                " \"I shine bright with points in the night sky\" \t \"I help people point at north, what number am I?\"");
-        System.out.println("You head back to the grand hall");
-        IvoryHall();
-    }
-
 
     static void IvoryRight() {
         typeWriter("You take the right staircase and you see a room, above the door is the number 3. Would you like to explore the room more or go to the statue at the center?");
-        System.out.println("1. Explore the room more | 2. Go to the statue at the center");
-        int choice = input.nextInt();
-        switch (choice) {
-            case 1 -> IvoryRightRoom();
-            case 2 -> IvoryRightStatue();
-        }
-    }
-
-    private static void IvoryRightRoom() {
-        typeWriter("The room is humid air thick with the smell of rain and mud, on the wall are framed taxidermy insects \n" +
-                "The walls and ceiling are covered in a tapestry of interlinked string and yarn");
-        IvoryRightStatue();
-    }
-
-    static void IvoryRightStatue() {
-        typeWriter("The statue looks like the vermin god, covered with insects of all shaped, adorned with a crown of butterfly wings, with a sign that reads \n" +
-                " \"I am the spinner of fate, I have many legs to help me walk.\" \n" +
-                " \"I am the weave maker of the word and have many eyes that help me see. What number am I?\"");
-        System.out.println("You head back to the grand hall");
-        IvoryHall();
+        EastRooms(Room3);
     }
 
 
@@ -839,7 +1284,6 @@ public class Main {
     }
 
 
-
     static void RainbowCloud() {
 
         if (RainbowCloud) {
@@ -949,7 +1393,6 @@ public class Main {
         RainbowCloud = true;
         CloudCrossway();
     }
-
 
 
     static void StormCloud() {
@@ -1197,7 +1640,7 @@ public class Main {
 //endregion
 
 
-//region south
+    //region south
     static void abyss() {
         if (SouthAccess) {
             System.out.println("You are too weak to go south yet. You need to explore the east first.");
@@ -1208,7 +1651,7 @@ public class Main {
 //endregion
 
 
-//region west
+    //region west
     static void forest() {
         if (WestAccess) {
             System.out.println("You are too weak to go west yet. You need to explore the south first.");
