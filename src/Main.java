@@ -148,7 +148,7 @@ public class Main {
 
         System.out.println("\n**********************************************\n");
 
-        System.out.println("Current Money is: " + p.Money + p.health + " Current Crystals: " + p.crystals + " Level: " + p.level + " Damage: " + p.damage + " Your Defense: " + p.defense);
+        System.out.println("Current Money is: " + p.Money + " Current Heath:" + p.health + " Current Crystals: " + p.crystals + " Level: " + p.level + " Damage: " + p.damage + " Your Defense: " + p.defense);
         typeWriter("To the north you have the crystal cave \n" +
                 "To the east you have the land of wind \n" +
                 "To the south is the endless abyss \n" +
