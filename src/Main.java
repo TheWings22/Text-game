@@ -1,14 +1,13 @@
+import java.text.DecimalFormat;
 import java.util.Scanner;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.ArrayList;
-import java.util.List;
 
 class Enemy {
-    int CrystalHunters = 30;
-    int Breeze = 50;
-    int LostSouls = 100;
-    int WilloWisps = 150;
+    int CrystalHunters = 50;
+    int Breeze = 100;
+    int LostSouls = 150;
+    int WilloWisps = 200;
 }
 
 class Player {
@@ -19,8 +18,10 @@ class Player {
     int BreezeHearts;
     int level = 1;
     int damage = 1;
+    int damageAccuracy = -1;
     int baseDamage = 0;
     int bonusDamage = 0;
+    double DamageAccuracyBonus = 0;
     int baseDefense = 0;
     int bonusDefense = 0;
     int defense = 0;
@@ -36,6 +37,7 @@ public class Main {
     static Enemy enemy = new Enemy();
 
     static Scanner input = new Scanner(System.in);
+    static Scanner attackInput = new Scanner(System.in);
 
 
     static Player p = new Player();
@@ -53,6 +55,8 @@ public class Main {
     static boolean Flowery = true;
     static boolean CaveShop = true;
     static boolean CaveShopHint = true;
+
+    static volatile boolean pressed = false;
 
     static boolean EastAccess = true;
     static boolean SouthAccess = true;
@@ -73,8 +77,8 @@ public class Main {
         }
 
 
-        p.baseDamage = (int) (p.level * 0.3);
-        p.damage = p.baseDamage + p.bonusDamage;
+        p.baseDamage = Math.max(1, (int) (p.level * 0.3));
+        p.damage = p.baseDamage + p.bonusDamage + (int) Math.ceil(p.DamageAccuracyBonus);
 
         p.baseDefense = (int) (p.level * 0.2);
         p.defense = p.baseDefense + p.bonusDefense;
@@ -98,6 +102,7 @@ public class Main {
         }
 
     }
+
     static String[] Inventory = new String[10];
 
 //region TextOutput
@@ -127,7 +132,7 @@ public class Main {
     static int EastCode = Integer.parseInt(Room1 + "" + Room2 + "" + Room3);
 
 
-    //endregion
+//endregion
 
 
 //region EastRooms
@@ -178,11 +183,13 @@ public class Main {
             Room0Statue();
         }
     }
+
     private static void Room0Explore() {
 
         typeWriter("The room feels cold, desolate and quite, darkness fills your every vision");
         Room0Statue();
     }
+
     private static void Room0Statue() {
         typeWriter("The statue of a warrior draped in black and white cloth, a sword on their hips, on it a sign reads");
         typeWriter("\"Now I have become death the destroyer of worlds, I am the enemy of life, I am the end of all things, the Nihility to Beauty\"\n" +
@@ -200,12 +207,14 @@ public class Main {
             Room1Statue();
         }
     }
+
     private static void Room1Explore() {
 
         typeWriter("The room is adored in renaissance celestial imagery. Rich blue walls and shimmering golden stars \n" +
                 "On the back wall lies a small soft flowing waterfall");
         Room1Statue();
     }
+
     private static void Room1Statue() {
         typeWriter("The statue is of a beautiful silver women, on it a sign reads");
         typeWriter("\" I watch from the heavens, guiding all lost souls under the coven of night.\" \n" +
@@ -224,11 +233,13 @@ public class Main {
             Room2Statue();
         }
     }
+
     private static void Room2Explore() {
 
         typeWriter("The room is adored in renaissance celestial imagery. Rich blue walls and shimmering golden stars \n");
         Room2Statue();
     }
+
     private static void Room2Statue() {
         typeWriter("The statue are twin warriors, one in silver, one in gold, their blade's intertwined with each other\n" +
                 "On it a sign reads");
@@ -247,12 +258,14 @@ public class Main {
             Room3Statue();
         }
     }
+
     private static void Room3Explore() {
 
         typeWriter("The room is cold, the walls dazzle with ice crystals, the ceiling painted with many moons\n" +
                 "Some full, some crescents, some gibbous");
         Room3Statue();
     }
+
     private static void Room3Statue() {
         typeWriter("The statue is an old witch, her hat long and crooked");
         typeWriter("\"I play like the Maiden, I love like the Mother, and I think like the Crone, I am the circle of life and the interconnectedness of nature\"\n" +
@@ -271,11 +284,13 @@ public class Main {
         }
 
     }
+
     private static void Room4Explore() {
 
         typeWriter("The room is humid, wooden planks adorn the walls, seashells and rocks scattered around, and compass lying around");
         Room4Statue();
     }
+
     private static void Room4Statue() {
         typeWriter("The statue looks like a pirate, a hand holding a compass, and the other planting a flag, the sign reads");
         typeWriter("\"I travel the sea with the sky, I use the little dipper to find treasure\"\n" +
@@ -293,6 +308,7 @@ public class Main {
             Room5Statue();
         }
     }
+
     private static void Room5Explore() {
         typeWriter("The room is dark, only lit up by candles on the walls, on the walls there are paintings of symbols \n" +
                 "runes, sigils, and other random symbols, you feel an odd energy coming from them \n" +
@@ -300,6 +316,7 @@ public class Main {
         Room5Statue();
 
     }
+
     private static void Room5Statue() {
         typeWriter("The statue looks like a witch, under it, it looks like a summoning circle, with a sign that reads \n" +
                 " \"I am many in the night sky, Twinkling above, I watch over you when I sleep, I am used for magic and connect the elements. What number am I?\"");
@@ -316,11 +333,13 @@ public class Main {
             Room6Statue();
         }
     }
+
     private static void Room6Explore() {
 
         typeWriter("The room is adorned with neon lights flashing, playing cards, poker chips, and dices lying around\n");
         Room6Statue();
     }
+
     private static void Room6Statue() {
 
         typeWriter("The statue is a handsome man in a suit, a hat covering his face, a comedy mask hanging from his fingers, he sign reads");
@@ -340,6 +359,7 @@ public class Main {
         }
 
     }
+
     private static void Room7Explore() {
 
         typeWriter("The room is cold, chilly even, the walls have stars all over, bright and shimmering, the ceiling painted like a galaxy \n" +
@@ -347,6 +367,7 @@ public class Main {
                 "The back wall has a giant glowing star high up");
         Room7Statue();
     }
+
     private static void Room7Statue() {
         typeWriter("The statue in the center look like of 2 twins, one older one younger, draped in bear fur. On it a sign reads\n" +
                 " \"I sleep in the heavens with my little brother\" \t \"I sleep in the heavens with my great brother\" " +
@@ -365,6 +386,7 @@ public class Main {
         }
 
     }
+
     private static void Room8Explore() {
 
         typeWriter("The room is humid air thick with the smell of rain and mud, on the wall are framed taxidermy insects \n" +
@@ -372,6 +394,7 @@ public class Main {
         Room8Statue();
 
     }
+
     private static void Room8Statue() {
         typeWriter("The statue looks like the vermin god, covered with insects of all shaped, adorned with a crown of butterfly wings, with a sign that reads \n" +
                 " \"I am the spinner of fate, I have many legs to help me walk.\" \n" +
@@ -389,11 +412,13 @@ public class Main {
             Room9Statue();
         }
     }
+
     private static void Room9Explore() {
 
         typeWriter("The room smells of lavender and vanilla, yarn balls and catnip lying everywhere");
         Room9Statue();
     }
+
     private static void Room9Statue() {
 
         typeWriter("The statue is a cat, sitting on a pile of yarn balls, a sign reads");
@@ -403,10 +428,11 @@ public class Main {
     }
 
 
-    //endregion
+//endregion
 
 
-    //region main class
+//region main class
+
     public static void main(String[] args) {
         System.setOut(new java.io.PrintStream(System.out, true));
 
@@ -439,10 +465,12 @@ public class Main {
 
         mainArea();
     }
+
 //endregion
 
 
-    //region Main Area
+//region Main Area
+
     static void mainArea() {
 
         System.out.println("\n**********************************************\n");
@@ -471,10 +499,11 @@ public class Main {
             }
         }
     }
+
 //endregion
 
 
-//region Damage
+//region Damage/Attack
 
     static void takeDamage(double enemyDamage) {
 
@@ -496,10 +525,118 @@ public class Main {
         checkHealth();
     }
 
-    //endregion
+    static void Accuracy() {
+
+        p.damageAccuracy = -1;
+        p.DamageAccuracyBonus = 0;
+        updateStats();
+
+        pressed = false;
+
+        double time = 3.00;
+
+        DecimalFormat df = new DecimalFormat("0.00");
+
+        Thread inputThread = new Thread(() -> {
+            try {
+                attackInput.nextLine();
+
+                if (!Thread.currentThread().isInterrupted()) {
+                    pressed = true;
+                }
+
+            } catch (Exception e) {
+                // ignore
+            }
+        });
+
+        inputThread.start();
+
+        while (time >= 0.00 && !pressed) {
+
+            System.out.print("\rTime: " + df.format(time));
+            System.out.flush();
+
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            time = Math.round((time - 0.01) * 100.0) / 100.0;
+        }
+
+        System.out.println();
+
+        if (pressed) {
+
+            double accuracy = Math.abs(time);
+
+            if (accuracy <= 0.05)
+                p.damageAccuracy = 30;
+            else if (accuracy <= 0.10)
+                p.damageAccuracy = 28;
+            else if (accuracy <= 0.20)
+                p.damageAccuracy = 22;
+            else if (accuracy <= 0.50)
+                p.damageAccuracy = 20;
+            else if (accuracy <= 0.80)
+                p.damageAccuracy = 13;
+            else if (accuracy <= 1.00)
+                p.damageAccuracy = 11;
+            else
+                p.damageAccuracy = 10;
+
+            inputThread.interrupt();
+
+            try {
+                inputThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        } else {
+
+            p.damageAccuracy = -1;
+            System.out.println("Attack missed");
+
+        }
+
+        inputThread.interrupt();
+
+        try {
+            inputThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static void Attack(){
+        if (p.damageAccuracy == -1)
+        {
+            p.DamageAccuracyBonus = 0;
+            updateStats();
+        }
+        else {
+            p.DamageAccuracyBonus = (( p.damage * p.damageAccuracy ) / 20.0);
+
+            updateStats();
+
+            System.out.println("Accuracy value: " + p.damageAccuracy);
+            System.out.println("Damage bonus: " + p.DamageAccuracyBonus);
+            System.out.println("Final attack damage: " + p.damage);
 
 
-    //region death
+        }
+    }
+
+
+
+//endregion
+
+
+//region death
+
     static void checkHealth() {
         if (p.health <= 0) {
             System.out.println();
@@ -575,6 +712,7 @@ public class Main {
         System.out.println();
         return seconds;
     }
+
 //endregion
 
 
@@ -630,24 +768,13 @@ public class Main {
 
         typeWriter("You lit the lamp making you see everything \n" +
                 "But oh no! You were spotted by " + Hunters + " crystal hunters \n" +
-                "Crystals hunters have " + enemy.CrystalHunters + " health points, do you \n");
-        System.out.println("1 Attack them | 2 distract them | 3 Run");
-        int choice = input.nextInt();
-        input.nextLine();
-        switch (choice) {
-            case 1 -> attack();
-            case 2 -> distract();
-            case 3 -> run();
-            default -> {
-                System.out.println("Invalid choice.");
-                lampPath();
-            }
-        }
+                "Crystals hunters have " + enemy.CrystalHunters + " health points\n");
+       CaveAttack();
     }
 
-    static void attack() {
+    static void CaveAttack() {
 
-        System.out.println("You bravely attack the crystal hunters!");
+        System.out.println("Press enter when the timer is close to 0.00  to get damage bonus");
 
         for (int i = 0; i < Hunters; i++) {
 
@@ -657,28 +784,31 @@ public class Main {
 
             while (CrystalHuntersHP > 0) {
 
-                // player attacks
-                CrystalHuntersHP -= p.damage;
+                System.out.println("Crystal HP: " + CrystalHuntersHP +
+                        " | Your HP: " + String.format("%.1f", p.health));
+                System.out.println("| 1 Fight | 2 Defend ");
 
-                String line =
-                        "Crystal HP: " + CrystalHuntersHP +
-                                " | Your HP: " + String.format("%.1f", p.health);
+                int choice = input.nextInt();
+                input.nextLine();
 
-                System.out.print("\r" + String.format("%-50s", line));
-                System.out.flush();
+                switch (choice) {
+                    case 1:
+                        Accuracy();
+                        Attack();
+                        if (p.damageAccuracy == -1) {
 
-                // if dead, stop BEFORE enemy turn
-                if (CrystalHuntersHP <= 0) {
-                    break;
-                }
+                            takeDamage(5);
 
-                // enemy attack only if still alive
-                takeDamage(5);
+                        }else {
 
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                            CrystalHuntersHP -= p.damage;
+                            takeDamage(5);
+                        }
+                        break;
+                    case 2:
+                        takeDamage(3.5);
+                        break;
+
                 }
 
                 checkHealth();
@@ -697,7 +827,6 @@ public class Main {
                 System.out.println("Hunter dropped " + randomValue + " coins");
 
 
-
             } else {
             }
 
@@ -709,19 +838,6 @@ public class Main {
         p.bonusDefense += 10;
         updateStats();
         System.out.println("Your total defense is now " + p.defense);
-        checkHealth();
-        cave2();
-    }
-
-    static void distract() {
-        typeWriter("To your surprise you managed to distract the crystal hunters and escape safely");
-        cave2();
-    }
-
-    static void run() {
-        typeWriter("You attempted to run but the hunter caught you and shot an arrow at you, causing you to lose some health");
-        p.health -= 30;
-        System.out.println("Your health is now  " + p.health);
         checkHealth();
         cave2();
     }
@@ -1004,7 +1120,6 @@ public class Main {
     }
 
 
-
 //endregion
 
 
@@ -1260,7 +1375,7 @@ public class Main {
             while (BreezeHP > 0) {
 
                 // player attacks
-                BreezeHP-= p.damage;
+                BreezeHP -= p.damage;
 
                 String line =
                         "Breeze HP: " + BreezeHP +
@@ -1629,7 +1744,7 @@ public class Main {
                     System.out.println("Your HP is now " + p.health);
                     HealTimes += 1;
 
-                    if (HealTimes == 3){
+                    if (HealTimes == 3) {
                         typeWriter("Aelous is enraged bt your overhaling and sends a tornado towards you");
                         takeDamage(AelousDamage + 40);
                         System.out.println("Your HP is now " + p.health);
@@ -1666,7 +1781,8 @@ public class Main {
 //endregion
 
 
-    //region south
+//region south
+
     static void abyss() {
         if (SouthAccess) {
             System.out.println("You are too weak to go south yet. You need to explore the east first.");
@@ -1674,10 +1790,12 @@ public class Main {
         }
         System.out.println("WIP");
     }
+
 //endregion
 
 
-    //region west
+//region west
+
     static void forest() {
         if (WestAccess) {
             System.out.println("You are too weak to go west yet. You need to explore the south first.");
@@ -1685,6 +1803,7 @@ public class Main {
         }
         System.out.println("WIP");
     }
+
 //endregion
 
 
