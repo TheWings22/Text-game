@@ -116,7 +116,7 @@ public class Main {
     }
 
     static int AeolusHealth = 500;
-    static int AelousDamage = 50;
+    static int AeolusDamage = 50;
 
     static String[] RainbowL = new String[3];
     static String[] RainbowR = new String[3];
@@ -1344,12 +1344,13 @@ public class Main {
     static void GnomeCave() {
 
         typeWriter("You can go left to the mines, right to town center, or forward to the gnome's chief\n");
-        System.out.println("|L left | C center | R light | I inventory (Works everywhere in gnome cave)");
+        System.out.println("|L left | C center | R light | B head back | I inventory (Works everywhere in gnome cave)");
         char direction = input.next().charAt(0);
         switch (direction) {
             case 'L', 'l' -> GnomeMines();
             case 'C', 'c' -> GnomeChief();
             case 'R', 'r' -> GnomeTown();
+            case 'B', 'b' -> cave2();
             case 'I', 'i' -> {
 
                 System.out.println("Coal: " + Coal + "\n" + "" +
@@ -1703,6 +1704,7 @@ public class Main {
                 p.crystals += 1;
                 p.level += 10;
                 North = true;
+                EastAccess = false;
                 mainArea();
 
 
@@ -1718,6 +1720,7 @@ public class Main {
         p.crystals += 1;
         p.level += 10;
         North = true;
+        EastAccess = false;
         mainArea();
     }
 
@@ -1915,7 +1918,7 @@ public class Main {
                         p.Money -= 1000;
                         typeWriter("You held the Charoite pickaxe feeling it's power. You existed the shop to go tested out\n" +
                                 "But before you made it 5 feet from the shop, the pickaxe shattered because Charoite if fragile\n" +
-                                "As you steare at the broken pieces, you can hear the shopkeeper snickering");
+                                "As you stare at the broken pieces, you can hear the shopkeeper snickering");
                         CharoitePik = false;
                         GnomeTown();
                     } else {
@@ -2140,97 +2143,217 @@ public class Main {
 
     static void IvoryDistract() {
 
-        System.out.println("You attack the Breezes!");
+        System.out.println("You bravely attack the Breezes!");
 
-        for (int i = 0; i < Breeze; i++) {
 
-            enemy.Breeze = 40;
+        for (int i = 0; i < Hunters; i++) {
 
-            System.out.println("\nFighting Breezes " + (i + 1));
+            int HeavyAttack = 0;
 
-            while (enemy.Breeze > 0) {
+            int BreezesHP = enemy.Breeze;
 
-                // player attacks
-                enemy.Breeze -= p.damage;
+            System.out.println("\nFighting Breeze " + (i + 1));
 
-                String line =
-                        "Breeze HP: " + enemy.Breeze +
-                                " | Your HP: " + String.format("%.1f", p.health);
+            while (BreezesHP > 0) {
 
-                System.out.print("\r" + String.format("%-50s", line));
-                System.out.flush();
+                HeavyAttack++;
 
-                // if dead, stop BEFORE enemy turn
-                if (enemy.Breeze <= 0) {
-                    break;
+
+                System.out.println("Breeze HP: " + BreezesHP +
+                        " | Your HP: " + String.format("%.1f", p.health));
+
+                if (HeavyAttack == 4) {
+                    typeWriter("Breeze prepares for a heavy attack");
                 }
 
-                // enemy attack only if still alive
-                takeDamage(10);
+                System.out.println("| 1 Fight | 2 Defend | 3 Prayer heal ");
 
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                String choice = input.nextLine();
+
+                if (HeavyAttack == 5) {
+                    typeWriter("Breeze unleashes a heavy attack");
+                    switch (choice) {
+                        case "1":
+                            Accuracy();
+                            Attack();
+                            if (p.damageAccuracy == -1) {
+
+                                takeDamage(25);
+
+                            } else {
+
+                                BreezesHP -= p.damage;
+                                takeDamage(25);
+                            }
+                            break;
+                        case "2":
+                            takeDamage(10);
+                            break;
+                        case "3":
+
+                            p.health += p.Healing;
+                            if (p.health > 100) {
+                                p.health = 100;
+                            }
+                            typeWriter("You tried to heal, but you faltered");
+                            takeDamage(10);
+
+                            checkHealth();
+
+                            break;
+
+
+                    }
+
+                    HeavyAttack = 0;
+
+                } else {
+                    switch (choice) {
+                        case "1":
+                            Accuracy();
+                            Attack();
+                            if (p.damageAccuracy == -1) {
+
+                                takeDamage(20);
+
+                            } else {
+
+                                BreezesHP -= p.damage;
+                                takeDamage(20);
+                            }
+                            break;
+                        case "2":
+                            takeDamage(5);
+                            break;
+                        case "3":
+
+                            p.health += p.Healing;
+                            if (p.health > 100) {
+                                p.health = 100;
+                            }
+                            takeDamage(5);
+                            checkHealth();
+
+                            break;
+
+
+                    }
                 }
 
-                checkHealth();
+
+                System.out.println("\nBreeze defeated!");
+
+
             }
-
-            System.out.println("\nBreeze defeated!");
         }
-
-        System.out.println("\nYou survived, your health is now " + p.health);
-        typeWriter("You obtained the missing ring piece, you head back to the cloud plateau to find the other missing pieces");
-
-        IvoryCastle = true;
-        p.WindRing += 1;
-        System.out.println("Wind Ring pieces are now " + p.WindRing + "\\3");
-        checkHealth();
-        CloudCrossway();
     }
 
     static void IvoryRun() {
 
-        System.out.println("You attack the Breezes!");
+        System.out.println("You bravely attack the Breezes!");
 
-        for (int i = 0; i < Breeze; i++) {
 
-            enemy.Breeze = 40;
+        for (int i = 0; i < Hunters; i++) {
 
-            System.out.println("\nFighting Breezes " + (i + 1));
+            int HeavyAttack = 0;
 
-            while (enemy.Breeze > 0) {
+            int BreezesHP = enemy.Breeze;
 
-                // player attacks
-                enemy.Breeze -= p.damage;
+            System.out.println("\nFighting Breeze " + (i + 1));
 
-                String line =
-                        "Breeze HP: " + enemy.Breeze +
-                                " | Your HP: " + String.format("%.1f", p.health);
+            while (BreezesHP > 0) {
 
-                System.out.print("\r" + String.format("%-50s", line));
-                System.out.flush();
+                HeavyAttack++;
 
-                // if dead, stop BEFORE enemy turn
-                if (enemy.Breeze <= 0) {
-                    break;
+
+                System.out.println("Breeze HP: " + BreezesHP +
+                        " | Your HP: " + String.format("%.1f", p.health));
+
+                if (HeavyAttack == 4) {
+                    typeWriter("Breeze prepares for a heavy attack");
                 }
 
-                // enemy attack only if still alive
-                takeDamage(7);
+                System.out.println("| 1 Fight | 2 Defend | 3 Prayer heal ");
 
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                String choice = input.nextLine();
+
+                if (HeavyAttack == 5) {
+                    typeWriter("Breeze unleashes a heavy attack");
+                    switch (choice) {
+                        case "1":
+                            Accuracy();
+                            Attack();
+                            if (p.damageAccuracy == -1) {
+
+                                takeDamage(25);
+
+                            } else {
+
+                                BreezesHP -= p.damage;
+                                takeDamage(25);
+                            }
+                            break;
+                        case "2":
+                            takeDamage(10);
+                            break;
+                        case "3":
+
+                            p.health += p.Healing;
+                            if (p.health > 100) {
+                                p.health = 100;
+                            }
+                            typeWriter("You tried to heal, but you faltered");
+                            takeDamage(10);
+
+                            checkHealth();
+
+                            break;
+
+
+                    }
+
+                    HeavyAttack = 0;
+
+                } else {
+                    switch (choice) {
+                        case "1":
+                            Accuracy();
+                            Attack();
+                            if (p.damageAccuracy == -1) {
+
+                                takeDamage(20);
+
+                            } else {
+
+                                BreezesHP -= p.damage;
+                                takeDamage(20);
+                            }
+                            break;
+                        case "2":
+                            takeDamage(5);
+                            break;
+                        case "3":
+
+                            p.health += p.Healing;
+                            if (p.health > 100) {
+                                p.health = 100;
+                            }
+                            takeDamage(5);
+                            checkHealth();
+
+                            break;
+
+
+                    }
                 }
 
-                checkHealth();
+
+                System.out.println("\nBreeze defeated!");
+
             }
 
-            System.out.println("\nBreeze defeated!");
         }
+
 
         System.out.println("\nYou survived, your health is now " + p.health);
         typeWriter("You obtained the missing ring piece, you head back to the cloud plateau to find the other missing pieces");
@@ -2246,43 +2369,108 @@ public class Main {
 
         System.out.println("You bravely attack the Breezes!");
 
-        for (int i = 0; i < Breeze; i++) {
 
-            int BreezeHP = enemy.Breeze;
+        for (int i = 0; i < Hunters; i++) {
 
-            System.out.println("\nFighting Hunter " + (i + 1));
+            int HeavyAttack = 0;
 
-            while (BreezeHP > 0) {
+            int BreezesHP = enemy.Breeze;
 
-                // player attacks
-                BreezeHP -= p.damage;
+            System.out.println("\nFighting Breeze " + (i + 1));
 
-                String line =
-                        "Breeze HP: " + BreezeHP +
-                                " | Your HP: " + String.format("%.1f", p.health);
+            while (BreezesHP > 0) {
 
-                System.out.print("\r" + String.format("%-50s", line));
-                System.out.flush();
+                HeavyAttack++;
 
-                // if dead, stop BEFORE enemy turn
-                if (BreezeHP <= 0) {
-                    break;
+
+                System.out.println("Breeze HP: " + BreezesHP +
+                        " | Your HP: " + String.format("%.1f", p.health));
+
+                if (HeavyAttack == 4) {
+                    typeWriter("Breeze prepares for a heavy attack");
                 }
 
-                // enemy attack only if still alive
-                takeDamage(5);
+                System.out.println("| 1 Fight | 2 Defend | 3 Prayer heal ");
 
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                String choice = input.nextLine();
+
+                if (HeavyAttack == 5) {
+                    typeWriter("Breeze unleashes a heavy attack");
+                    switch (choice) {
+                        case "1":
+                            Accuracy();
+                            Attack();
+                            if (p.damageAccuracy == -1) {
+
+                                takeDamage(20);
+
+                            } else {
+
+                                BreezesHP -= p.damage;
+                                takeDamage(20);
+                            }
+                            break;
+                        case "2":
+                            takeDamage(10);
+                            break;
+                        case "3":
+
+                            p.health += p.Healing;
+                            if (p.health > 100) {
+                                p.health = 100;
+                            }
+                            typeWriter("You tried to heal, but you faltered");
+                            takeDamage(10);
+
+                            checkHealth();
+
+                            break;
+
+
+                    }
+
+                    HeavyAttack = 0;
+
+                } else {
+                    switch (choice) {
+                        case "1":
+                            Accuracy();
+                            Attack();
+                            if (p.damageAccuracy == -1) {
+
+                                takeDamage(15);
+
+                            } else {
+
+                                BreezesHP -= p.damage;
+                                takeDamage(15);
+                            }
+                            break;
+                        case "2":
+                            takeDamage(5);
+                            break;
+                        case "3":
+
+                            p.health += p.Healing;
+                            if (p.health > 100) {
+                                p.health = 100;
+                            }
+                            takeDamage(5);
+                            checkHealth();
+
+                            break;
+
+
+                    }
                 }
 
-                checkHealth();
+
+                System.out.println("\nBreeze defeated!");
+
             }
 
-            System.out.println("\nBreeze defeated!");
         }
+
 
         System.out.println("\nYou survived, your health is now " + p.health);
         typeWriter("You obtained the missing ring piece, you head back to the cloud plateau to find the other missing pieces");
@@ -2509,18 +2697,20 @@ public class Main {
         p.health = 100;
         p.bonusDamage += 20;
         p.bonusDefense += 20;
+        p.Magic += 20;
         updateStats();
 
         StormCloud = true;
         System.out.println("Your health is now " + p.health);
         System.out.println("Your damage is now " + p.damage);
         System.out.println("Your defense is now " + p.defense);
+        System.out.println("Your magic is now " + p.Magic);
         CloudCrossway();
     }
 
     static void Aeolus() {
-        typeWriter("Aeolus: \"You dare to defy me To make me feel shame? No one beats me, no one wins my game, \" \n ");
-        typeWriter("\"wind bring them through the wringer\" \n");
+        typeWriter("Aeolus: \"You dare to defy me To make me feel shame? No one beats me, no one wins my game, \"");
+        typeWriter("\"wind bring them through the wringer\"");
         typeWriter("Show them I'm the judgement call The one who makes her kingdom fall\"");
         System.out.println("You enter a fight with Aeolus");
         AeolusFight();
@@ -2531,9 +2721,10 @@ public class Main {
 
         int i = 0;
 
+        int HealTimes = 0;
+
         while (AeolusHealth > 0) {
 
-            int HealTimes = 0;
 
             if (i > 0 && i % 5 == 0) {
                 System.out.println("You feel the power of determination rush into you\n" +
@@ -2543,51 +2734,25 @@ public class Main {
                 System.out.println("Your damage is now " + p.damage);
             }
 
-            System.out.println("Your HP: " + p.health + " | Aeolus HP: " + AeolusHealth + " | Your Damage: " + p.damage + " | Aeolus Damage: " + AelousDamage);
+            System.out.println("Your HP: " + p.health + " | Aeolus HP: " + AeolusHealth + " | Your Damage: " + p.damage + " | Aeolus Damage: " + AeolusDamage);
             System.out.println("Press 1 to attack | 2 to defend | 3 to heal");
             char choice = input.next().charAt(0);
+            input.nextLine();
             switch (choice) {
                 case '1' -> {
+                    Accuracy();
+                    Attack();
+                    if (p.damageAccuracy == -1) {
 
-                    int Attack = random.nextInt(3);
+                        takeDamage(AeolusDamage);
 
-                    switch (Attack) {
-                        case 0:
-                            AeolusHealth -= p.damage;
-                            typeWriter("You struck Aeolus!");
-                            System.out.println("Aeolus's HP is now " + AeolusHealth);
+                    } else {
 
-                            typeWriter("Aeolus fights back!");
-                            takeDamage(AelousDamage);
-                            System.out.println("Your HP is now " + p.health);
-
-                            break;
-
-
-                        case 1:
-                            AeolusHealth -= p.damage + 10;
-                            typeWriter("You hit a hard hit on Aeolus!");
-                            System.out.println("Aeolus's HP is now " + AeolusHealth);
-
-                            typeWriter("Aeolus fights back!");
-                            takeDamage(AelousDamage);
-                            System.out.println("Your HP is now " + p.health);
-
-                            break;
-
-                        case 2:
-                            AeolusHealth -= p.damage + 20;
-                            typeWriter("You hit a critical hit on Aeolus!");
-                            System.out.println("Aeolus's HP is now " + AeolusHealth);
-
-                            System.out.println("Aeolus fights back!");
-                            takeDamage(AelousDamage);
-                            System.out.println("Your HP is now " + p.health);
-
-                            break;
+                        AeolusHealth -= p.damage;
+                        takeDamage(AeolusDamage);
+                        typeWriter("You struck Aeolus!");
+                        System.out.println("Aeolus's HP is now " + AeolusHealth);
                     }
-
-                    checkHealth();
                 }
                 case '2' -> {
                     System.out.println("You defended against Aeolus's attack");
@@ -2595,19 +2760,19 @@ public class Main {
 
                     switch (defended) {
                         case 0:
-                            takeDamage(AelousDamage - 5);
+                            takeDamage(AeolusDamage - 5);
                             typeWriter("You blocked Aeolus attack!)");
                             System.out.println("Your HP is now " + p.health);
                             break;
 
                         case 1:
-                            takeDamage(AelousDamage - 10);
+                            takeDamage(AeolusDamage - 10);
                             typeWriter("You hit a hard blocked against Aeolus attack!)");
                             System.out.println("Your HP is now " + p.health);
                             break;
 
                         case 2:
-                            takeDamage(AelousDamage - 20);
+                            takeDamage(AeolusDamage - 20);
                             typeWriter("You hit a critical blocked against Aeolus attack!)");
                             System.out.println("Your HP is now " + p.health);
                             break;
@@ -2618,25 +2783,25 @@ public class Main {
                 }
                 case '3' -> {
                     typeWriter("You cupped your hand in prayer, determination filled you of your travels as you got healed");
-                    p.health = 20;
+                    p.health += p.Healing;
                     if (p.health > 100) {
                         p.health = 100;
                     }
                     System.out.println("Aeolus fights!");
-                    takeDamage(AelousDamage - 10);
+                    takeDamage(AeolusDamage - 10);
                     System.out.println("Your HP is now " + p.health);
                     HealTimes += 1;
 
                     if (HealTimes == 3) {
-                        typeWriter("Aelous is enraged bt your overhaling and sends a tornado towards you");
-                        takeDamage(AelousDamage + 40);
+                        typeWriter("Aeolus is enraged bt your overhaling and sends a tornado towards you");
+                        takeDamage(AeolusDamage + 40);
                         System.out.println("Your HP is now " + p.health);
                         HealTimes = 0;
                     }
                 }
                 default -> {
                     typeWriter("You falter in your attack, Aeolus takes advantage and hits a critical hit");
-                    takeDamage(AelousDamage + 20);
+                    takeDamage(AeolusDamage + 20);
                     System.out.println("Your HP is now " + p.health);
                 }
             }
