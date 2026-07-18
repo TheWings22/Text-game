@@ -18,6 +18,8 @@ class Player {
     int BreezeHearts;
     int level = 1;
     int damage = 1;
+    int Magic = 1;
+    int Healing;
     int damageAccuracy = -1;
     int baseDamage = 0;
     int bonusDamage = 0;
@@ -56,7 +58,10 @@ public class Main {
     static boolean CaveShopHint = true;
 
     static volatile boolean pressed = false;
+    static volatile boolean Minepressed = false;
     static boolean accuracyRunning = false;
+    static boolean accuracyMining = false;
+    static boolean miningExit = false;
 
     static boolean EastAccess = true;
     static boolean SouthAccess = true;
@@ -67,6 +72,26 @@ public class Main {
     static int Breeze = random.nextInt(3) + 3;
     static int LostSouls = random.nextInt(3) + 5;
     static int WilloWisps = random.nextInt(3) + 7;
+
+
+    static int Coal = 0;
+    static int Iron = 0;
+    static int Gold = 0;
+    static int Diamond = 0;
+    static int Ruby = 0;
+    static int Obsidian = 0;
+    static int Amethyst = 0;
+    static int MiningAccuracy = 0;
+
+    static int pickaxeLuck = 0;
+    static int pickaxeTier = 0;
+
+    static boolean IronPik = true;
+    static boolean GoldPik = true;
+    static boolean DiamondPik = true;
+    static boolean RubyPik = true;
+    static boolean EmeraldPik = true;
+    static boolean CharoitePik = true;
 
     static int totalTraining = 0;
 
@@ -82,6 +107,11 @@ public class Main {
 
         p.baseDefense = (int) (p.level * 0.2);
         p.defense = p.baseDefense + p.bonusDefense;
+
+
+        p.Magic = Math.max(1, (int) (p.level * 0.5));
+        p.Healing = Math.max(5, (int) (p.Magic * 1.5 + 5));
+
 
     }
 
@@ -454,6 +484,10 @@ public class Main {
             Ahmed = true;
             p.level = 999;
             p.damage = 999;
+            p.Healing = 999;
+            p.Money = 999;
+            p.defense = 999;
+            p.Money = 99999;
 
             System.out.println("Aha has joined the game!");
         }
@@ -475,7 +509,8 @@ public class Main {
 
         System.out.println("\n**********************************************\n");
 
-        System.out.println("Current Money is: " + p.Money + " Current Heath:" + p.health + " Current Crystals: " + p.crystals + " Level: " + p.level + " Damage: " + p.damage + " Your Defense: " + p.defense);
+        System.out.println("Current Money is: " + p.Money + " Current Heath: " + p.health + " Current Crystals: " + p.crystals + "\n" +
+                " Level: " + p.level + " Damage: " + p.damage + " Your Defense: " + p.defense + " Your magic level is " + p.Magic);
         typeWriter("To the north you have the crystal cave \n" +
                 "To the east you have the land of wind \n" +
                 "To the south is the endless abyss \n" +
@@ -624,6 +659,166 @@ public class Main {
 //endregion
 
 
+//region GnomeMine
+
+    static void GnomeMine() {
+
+        Minepressed = false;
+        miningExit = false;
+        accuracyMining = true;
+        MiningAccuracy = -1;
+
+        double time = 3.00;
+
+        DecimalFormat df = new DecimalFormat("0.00");
+
+        Thread inputThread = new Thread(() -> {
+            try {
+
+                while (accuracyMining) {
+
+                    int key = System.in.read();
+
+                    if (key == '\n' || key == '\r') {
+                        Minepressed = true;
+                        break;
+                    }
+
+                    if (key == 'e' || key == 'E') {
+                        miningExit = true;
+                        break;
+                    }
+                }
+
+            } catch (Exception e) {
+
+            }
+        });
+
+        inputThread.start();
+
+
+        while (time >= 0.00 && !Minepressed && !miningExit) {
+
+            System.out.print("\rTime: " + df.format(time));
+            System.out.flush();
+
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            time = Math.round((time - 0.01) * 100.0) / 100.0;
+        }
+
+
+        accuracyMining = false;
+
+
+        try {
+            inputThread.join(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        // Player pressed E
+        if (miningExit) {
+
+            try {
+                while (System.in.available() > 0) {
+                    System.in.read();
+                }
+            } catch (Exception e) {
+
+            }
+
+            return;
+        }
+
+
+        System.out.println();
+
+
+        if (Minepressed) {
+
+            double accuracy = Math.abs(time);
+
+            int miningQuality;
+
+            if (accuracy <= 0.05) {
+                miningQuality = 100;
+            } else if (accuracy <= 0.10) {
+                miningQuality = 85;
+            } else if (accuracy <= 0.20) {
+                miningQuality = 70;
+            } else if (accuracy <= 0.50) {
+                miningQuality = 50;
+            } else if (accuracy <= 1.00) {
+                miningQuality = 25;
+            } else {
+                miningQuality = 10;
+            }
+
+            MineOres(miningQuality, pickaxeLuck);
+
+        } else {
+
+            System.out.println("You smashed the rock to pieces. The gemstone disintegrated.");
+
+        }
+    }
+
+    static void MineOres(int quality, int luck) {
+
+        int roll = random.nextInt(100);
+
+        // Pickaxe luck pushes the roll toward rarer ores
+        roll = Math.min(roll + luck, 99);
+
+
+        if (roll < 40) {
+
+            System.out.println("Coal was found");
+            Coal++;
+
+        } else if (roll < 65) {
+
+            System.out.println("Iron was found");
+            Iron++;
+
+        } else if (roll < 80) {
+
+            System.out.println("Gold was found");
+            Gold++;
+
+        } else if (roll < 90 + quality / 20) {
+
+            System.out.println("Obsidian was found");
+            Obsidian++;
+
+        } else if (roll < 96 + quality / 25) {
+
+            System.out.println("Amethyst was found");
+            Amethyst++;
+
+        } else if (roll < 99 + quality / 50) {
+
+            System.out.println("Diamond was found");
+            Diamond++;
+
+        } else {
+
+            System.out.println("Ruby was found");
+            Ruby++;
+
+        }
+    }
+
+//endregion
+
+
 //region death
 
     static void checkHealth() {
@@ -748,10 +943,14 @@ public class Main {
         System.out.print("Do you use a lamp? (Y/N): ");
         char lamp = input.next().charAt(0);
         input.nextLine();
-        if (lamp == 'y' || lamp == 'Y') {
-            lampPath();
-        } else {
-            noLampPath();
+        switch (lamp) {
+            case 'Y', 'y' -> lampPath();
+            case 'N', 'n' -> noLampPath();
+            default -> {
+                typeWriter("Invalid input. Please try again.");
+                cave();
+            }
+
         }
     }
 
@@ -812,7 +1011,7 @@ public class Main {
                             break;
                         case "3":
 
-                            p.health += 5;
+                            p.health += p.Healing;
                             if (p.health > 100) {
                                 p.health = 100;
                             }
@@ -824,13 +1023,11 @@ public class Main {
                             break;
 
 
-
                     }
 
                     HeavyAttack = 0;
 
-                }
-                else {
+                } else {
                     switch (choice) {
                         case "1":
                             Accuracy();
@@ -870,19 +1067,14 @@ public class Main {
 
             System.out.println("\nHunter defeated!");
 
-            if (ThreadLocalRandom.current().nextInt(100) < 50) {
+            int intervals = 3;
 
-                int intervals = 3;
+            int randomValue = (random.nextInt(intervals) + 1) * 5;
 
-                int randomValue = (random.nextInt(intervals) + 1) * 5;
+            p.Money += randomValue;
 
-                p.Money += randomValue;
+            System.out.println("Hunter dropped " + randomValue + " coins");
 
-                System.out.println("Hunter dropped " + randomValue + " coins");
-
-
-            } else {
-            }
 
         }
 
@@ -943,6 +1135,7 @@ public class Main {
                     cave2();
                 }
             }
+            return;
         }
         typeWriter("You found yourself at a 3 way crossroad \n" +
                 "To the left is the shop\n" +
@@ -970,6 +1163,7 @@ public class Main {
             typeWriter("\"Oh sorry there traveler, I didn't mean to scare you, I was just fixing the lights hehe\"");
 
             CaveShopFirstTime();
+            return;
         }
         CaveShopFirstTime();
     }
@@ -1143,34 +1337,666 @@ public class Main {
 
     static void CenterCave() {
         typeWriter("You entered the center cave, the crystals shimmered and you felt a sense of calm \n" +
-                "You found 2 chest, one made of wood, and the other made of diamonds \n");
-        System.out.println("Which one do you open? Diamonds or Wood");
-        char chest = input.next().charAt(0);
-        switch (chest) {
-            case 'D', 'd' -> Diamonds();
-            case 'W', 'w' -> Wood();
+                "You stand in front of a large opening, gnomes trotting all over, doing their duties.\n");
+        GnomeCave();
+    }
+
+    static void GnomeCave() {
+
+        typeWriter("You can go left to the mines, right to town center, or forward to the gnome's chief\n");
+        System.out.println("|L left | C center | R light | I inventory (Works everywhere in gnome cave)");
+        char direction = input.next().charAt(0);
+        switch (direction) {
+            case 'L', 'l' -> GnomeMines();
+            case 'C', 'c' -> GnomeChief();
+            case 'R', 'r' -> GnomeTown();
+            case 'I', 'i' -> {
+
+                System.out.println("Coal: " + Coal + "\n" + "" +
+                        "Iron: " + Iron + "\n" +
+                        "Gold: " + Gold + "\n" +
+                        "Obsidian: " + Obsidian + "\n" +
+                        "Amethyst: " + Amethyst + "\n" +
+                        "Diamond: " + Diamond + "\n" +
+                        "Ruby: " + Ruby);
+                GnomeCave();
+            }
+            default -> {
+                typeWriter("Invalid direction.");
+                CenterCave();
+            }
         }
 
     }
 
-    static void Diamonds() {
-        typeWriter("You opened the diamond chest \n" +
-                "Congratulations! You found one of the portal crystals, you safely left the crystal cave");
-        System.out.println("Your level increased");
-        EastAccess = false;
-        p.level += 10;
-        p.crystals += 1;
-        North = true;
-        TrainingCap = false;
-        mainArea();
+    static void GnomeMines() {
+        typeWriter("You head to the mining area, you pick up a rusty pickaxe from the wall");
+        System.out.println("| M to mine | B to head back to upgrade pickaxe | I inventory");
+        char Input = input.next().charAt(0);
+        input.nextLine();
+        switch (Input) {
+            case 'M', 'm' -> {
+                typeWriter("Hold E and enter to cancel mining");
+
+                miningExit = false;
+
+                while (!miningExit) {
+                    GnomeMine();
+                }
+
+                GnomeMines(); // Go back to the mining menu
+                return;
+            }
+            case 'B', 'b' -> GnomeCave();
+            case 'I', 'i' -> {
+                System.out.println("Coal: " + Coal + "\n" + "" +
+                        "Iron: " + Iron + "\n" +
+                        "Gold: " + Gold + "\n" +
+                        "Obsidian: " + Obsidian + "\n" +
+                        "Amethyst: " + Amethyst + "\n" +
+                        "Diamond: " + Diamond + "\n" +
+                        "Ruby: " + Ruby);
+                GnomeMines();
+            }
+            default -> {
+                typeWriter("Invalid input.");
+                GnomeMines();
+            }
+        }
 
     }
 
-    static void Wood() {
-        typeWriter("You opened the wooden chest \n" +
-                "Oh no! It was a mimic, it instantly killed you");
-        p.health = 0;
+    static void GnomeChief() {
+        typeWriter("You head up the grand tower, the chief gnome on his throne. But above him is the North crystal, he catches you eyeing it and laughs");
+        typeWriter("\"Pretty isn't it? found it at the top of the icy mounts. If you want it, well, give me 100,000$ and it's yours. Otherwise it's mine");
+        System.out.println("| 1 give the money | 2 fight him and steal it by force | 3 head back");
+        int choice = input.nextInt();
+        input.nextLine();
+
+        switch (choice) {
+            case 1 -> {
+                if (p.Money >= 100000) {
+                    typeWriter("You gave the gnome chief the money. He laughs happily");
+                    typeWriter("\"As intended here");
+                    System.out.println("North crystal was added to you items");
+                    typeWriter("As you begin to walk out you noticed something. It's ony a piece of obsidian, a fake \n" +
+                            "You turn back and the throne is empty. You quickly tracked the chief down and entered a fight");
+                    GnomeFight();
+
+                }
+            }
+            case 2 -> {
+                typeWriter("You raise your sword towards the chief");
+                typeWriter("\"Oh you wish to fight me? HAHAH get through my orc guards first");
+                OrcFight();
+            }
+            case 3 -> {
+                typeWriter("You head back");
+                GnomeMines();
+            }
+            default -> {
+                typeWriter("Invalid input.");
+                GnomeChief();
+            }
+        }
+    }
+
+    static void OrcFight() {
+
+        int Orc = 250;
+        typeWriter("Orcs have 250hp. 20 ATK");
+
+        for (int i = 0; i < 2; i++) {
+
+            int HeavyAttack = 0;
+
+            int OrcHP = Orc;
+
+            System.out.println("\nFighting Orc " + (i + 1));
+
+            while (OrcHP > 0) {
+
+                HeavyAttack++;
+
+
+                System.out.println("Orc HP: " + OrcHP +
+                        " | Your HP: " + String.format("%.1f", p.health));
+
+                if (HeavyAttack == 4) {
+                    typeWriter("Orc prepares for a heavy attack");
+                }
+
+                System.out.println("| 1 Fight | 2 Defend | 3 Prayer heal ");
+
+                String choice = input.nextLine().trim();
+
+                if (HeavyAttack == 5) {
+                    typeWriter("Orc unleashes a heavy attack");
+                    switch (choice) {
+                        case "1":
+                            Accuracy();
+                            Attack();
+                            if (p.damageAccuracy == -1) {
+
+                                takeDamage(30);
+
+                            } else {
+
+                                OrcHP -= p.damage;
+                                takeDamage(30);
+                            }
+                            break;
+                        case "2":
+                            takeDamage(5);
+                            break;
+                        case "3":
+
+                            p.health += p.Healing;
+                            if (p.health > 100) {
+                                p.health = 100;
+                            }
+                            typeWriter("You tried to heal, but you faltered");
+                            takeDamage(10);
+
+                            checkHealth();
+
+                            break;
+
+
+                    }
+
+                    HeavyAttack = 0;
+
+                } else {
+                    switch (choice) {
+                        case "1":
+                            Accuracy();
+                            Attack();
+                            if (p.damageAccuracy == -1) {
+
+                                takeDamage(20);
+
+                            } else {
+
+                                OrcHP -= p.damage;
+                                takeDamage(20);
+                            }
+                            break;
+                        case "2":
+                            takeDamage(5);
+                            break;
+                        case "3":
+
+                            p.health += p.Healing;
+                            if (p.health > 100) {
+                                p.health = 100;
+                            }
+                            takeDamage(5);
+                            checkHealth();
+
+                            break;
+
+
+                    }
+                }
+
+                checkHealth();
+
+
+            }
+
+            System.out.println("\nOrc defeated!");
+
+            int intervals = 20;
+
+            int randomValue = (random.nextInt(intervals) + 1) * 5;
+
+            p.Money += randomValue;
+
+            System.out.println("Orc dropped " + randomValue + " coins");
+
+
+        }
+
         checkHealth();
+
+        System.out.println("\nYou survived, your health is now " + p.health);
+        GnomeFight();
+
+    }
+
+
+    static void GnomeFight() {
+
+        typeWriter("\"Wh-WHAT.. W-wait please HAVE MERCY");
+        System.out.println("| 1 fight | 2 show mercy");
+        int choice = input.nextInt();
+        switch (choice) {
+            case 1 -> {
+                U_R_evil();
+            }
+            case 2 -> {
+                GnomeMercy();
+            }
+            default -> {
+                typeWriter("Invalid input.");
+                GnomeFight();
+            }
+        }
+    }
+
+    static void U_R_evil() {
+        System.out.println("Gnome chief has 10hp. 1ATK");
+        System.out.println("| 1 fight? | 2 show mercy");
+        int choice = input.nextInt();
+        input.nextLine();
+
+        switch (choice) {
+            case 1 -> {
+
+                int HeavyAttack = 0;
+                int Gnomehp = 10;
+
+                System.out.println("\nFighting Gnome chief");
+
+                while (Gnomehp > 0) {
+
+                    HeavyAttack++;
+
+
+                    System.out.println("Crystal HP: " + Gnomehp +
+                            " | Your HP: " + String.format("%.1f", p.health));
+
+                    if (HeavyAttack == 4) {
+                        typeWriter("Gnome chief prepares for a heavy attack");
+                    }
+
+                    System.out.println("| 1 Fight | 2 Defend | 3 Prayer heal | 4 show mercy ");
+
+                    String option = input.nextLine();
+
+                    if (HeavyAttack == 5) {
+                        typeWriter("Gnome chief attempts to launch a heavy attack. But it does nothing");
+                        switch (option) {
+                            case "1":
+                                Accuracy();
+                                Attack();
+                                if (p.damageAccuracy == -1) {
+
+                                    takeDamage(1);
+
+                                } else {
+
+                                    Gnomehp -= p.damage;
+                                    takeDamage(1);
+                                }
+                                break;
+                            case "2":
+                                takeDamage(0);
+                                break;
+                            case "3":
+
+                                p.health += p.Healing;
+                                if (p.health > 100) {
+                                    p.health = 100;
+                                }
+                                takeDamage(1);
+
+                                checkHealth();
+
+                                break;
+
+                            case "4":
+                                GnomeMercy();
+
+
+                        }
+
+                        HeavyAttack = 0;
+
+                    } else {
+                        switch (option) {
+                            case "1":
+                                Accuracy();
+                                Attack();
+                                if (p.damageAccuracy == -1) {
+
+                                    takeDamage(1);
+
+                                } else {
+
+                                    Gnomehp -= p.damage;
+                                    takeDamage(1);
+                                }
+                                break;
+                            case "2":
+                                takeDamage(0);
+                                break;
+                            case "3":
+
+                                p.health += p.Healing;
+                                if (p.health > 100) {
+                                    p.health = 100;
+                                }
+                                takeDamage(1);
+                                checkHealth();
+
+                                break;
+                            case "4":
+                                GnomeMercy();
+
+                        }
+                    }
+
+                    checkHealth();
+
+
+                }
+
+                System.out.println("\nGnome defeated........you monster");
+
+                p.Money += 100000;
+
+                typeWriter("Gnome dropped 100000 coins");
+
+                typeWriter("The gnome tribe kicked you out, but before that you managed to snag the real north crystal");
+                p.crystals += 1;
+                p.level += 10;
+                North = true;
+                mainArea();
+
+
+            }
+            case 2 -> {
+                GnomeMercy();
+            }
+        }
+    }
+
+    static void GnomeMercy() {
+        typeWriter("You laid your sword down. The chief gnome scrambled away, after a while he came back handing you the true north crystal before running away");
+        p.crystals += 1;
+        p.level += 10;
+        North = true;
+        mainArea();
+    }
+
+
+    static void GnomeTown() {
+        typeWriter("You enter the town center, gnomes trotting around, you saw 2 shops, a bank to cash your gems and a mining store to upgrade your pickaxe");
+        System.out.println("| B Bank | P Pickaxe | H Head back | I inventory");
+        char Input = input.next().charAt(0);
+        input.nextLine();
+        switch (Input) {
+            case 'B', 'b' -> GnomeBank();
+            case 'P', 'p' -> GnomeShop();
+            case 'H', 'h' -> GnomeCave();
+            case 'I', 'i' -> {
+                System.out.println("Coal: " + Coal + "\n" + "" +
+                        "Iron: " + Iron + "\n" +
+                        "Gold: " + Gold + "\n" +
+                        "Obsidian: " + Obsidian + "\n" +
+                        "Amethyst: " + Amethyst + "\n" +
+                        "Diamond: " + Diamond + "\n" +
+                        "Ruby: " + Ruby);
+                GnomeMines();
+            }
+            default -> {
+                typeWriter("Invalid input.");
+                GnomeTown();
+            }
+        }
+    }
+
+    static void GnomeShop() {
+
+        typeWriter("Welcome, would you like a new pickaxe?");
+        System.out.println("Your money is: " + p.Money);
+        System.out.println("Available pickaxe");
+        System.out.println("1 | Iron Pickaxe: 50$ + 10 luck boost\n" +
+                "2 | Golden Pickaxe: 100$ + 15 luck boost\n" +
+                "3 | Diamond Pickaxe: 200$ + 20 luck boost\n" +
+                "4 | Ruby Pickaxe: 250$ + 25 luck boost\n" +
+                "5 | Emerald Pickaxe: 350$ + 30 luck boost\n" +
+                "6 | Charoite Pickaxe: 1000$ + 100 luck boost");
+        System.out.println("Please enter which pickaxe you want or | E to go back");
+        char Input = input.next().charAt(0);
+        switch (Input) {
+            case 'E', 'e' -> {
+                GnomeTown();
+            }
+            case '1' -> { // Iron Pickaxe
+
+                if (pickaxeTier < 1) {
+
+                    if (p.Money >= 50) {
+
+                        p.Money -= 50;
+                        pickaxeLuck = 10;
+                        pickaxeTier = 1;
+
+                        typeWriter("You bought the Iron pickaxe");
+                        GnomeShop();
+
+                    } else {
+
+                        typeWriter("You don't have enough money");
+                        GnomeShop();
+
+                    }
+
+                } else {
+
+                    typeWriter("You already own this or a better pickaxe.");
+                    GnomeShop();
+
+                }
+            }
+
+
+            case '2' -> { // Golden Pickaxe
+
+                if (pickaxeTier < 2) {
+
+                    if (p.Money >= 100) {
+
+                        p.Money -= 100;
+                        pickaxeLuck = 15;
+                        pickaxeTier = 2;
+
+                        typeWriter("You bought the Golden pickaxe");
+                        GnomeShop();
+
+                    } else {
+
+                        typeWriter("You don't have enough money");
+                        GnomeShop();
+
+                    }
+
+                } else {
+
+                    typeWriter("You already own this or a better pickaxe.");
+                    GnomeShop();
+
+                }
+            }
+
+
+            case '3' -> { // Diamond Pickaxe
+
+                if (pickaxeTier < 3) {
+
+                    if (p.Money >= 200) {
+
+                        p.Money -= 200;
+                        pickaxeLuck = 20;
+                        pickaxeTier = 3;
+
+                        typeWriter("You bought the Diamond pickaxe");
+                        GnomeShop();
+
+                    } else {
+
+                        typeWriter("You don't have enough money");
+                        GnomeShop();
+
+                    }
+
+                } else {
+
+                    typeWriter("You already own this or a better pickaxe.");
+                    GnomeShop();
+
+                }
+            }
+
+
+            case '4' -> { // Ruby Pickaxe
+
+                if (pickaxeTier < 4) {
+
+                    if (p.Money >= 250) {
+
+                        p.Money -= 250;
+                        pickaxeLuck = 25;
+                        pickaxeTier = 4;
+
+                        typeWriter("You bought the Ruby pickaxe");
+                        GnomeShop();
+
+                    } else {
+
+                        typeWriter("You don't have enough money");
+                        GnomeShop();
+
+                    }
+
+                } else {
+
+                    typeWriter("You already own this or a better pickaxe.");
+                    GnomeShop();
+
+                }
+            }
+
+
+            case '5' -> { // Emerald Pickaxe
+
+                if (pickaxeTier < 5) {
+
+                    if (p.Money >= 350) {
+
+                        p.Money -= 350;
+                        pickaxeLuck = 30;
+                        pickaxeTier = 5;
+
+                        typeWriter("You bought the Emerald pickaxe");
+                        GnomeShop();
+
+                    } else {
+
+                        typeWriter("You don't have enough money");
+                        GnomeShop();
+
+                    }
+
+                } else {
+
+                    typeWriter("You already own this or a better pickaxe.");
+                    GnomeShop();
+
+                }
+            }
+
+            case '6' -> {
+                if (CharoitePik) {
+                    if (p.Money >= 1000) {
+                        p.Money -= 1000;
+                        typeWriter("You held the Charoite pickaxe feeling it's power. You existed the shop to go tested out\n" +
+                                "But before you made it 5 feet from the shop, the pickaxe shattered because Charoite if fragile\n" +
+                                "As you steare at the broken pieces, you can hear the shopkeeper snickering");
+                        CharoitePik = false;
+                        GnomeTown();
+                    } else {
+                        typeWriter("You don't have enough money");
+                        GnomeShop();
+                    }
+                } else {
+                    typeWriter("Item is sold out.... Hehe");
+                    GnomeShop();
+                }
+            }
+            default -> {
+                typeWriter("Invalid input.");
+                GnomeShop();
+            }
+        }
+    }
+
+    static void GnomeBank() {
+        typeWriter("Welcome, would you like to cash in your gems?");
+        System.out.println("Gem prices" + "\n" +
+                "Coal: 5$\n" +
+                "Iron: 10$\n" +
+                "Gold: 20$\n" +
+                "Obsidian: 30$\n" +
+                "Amethyst: 40$\n" +
+                "Diamond: 50$\n" +
+                "Ruby: 100$");
+        System.out.println("| 1 to cash in | 2 head back");
+        int chouce = input.nextInt();
+        switch (chouce) {
+            case 1 -> {
+                SellAllOres();
+            }
+            case 2 -> GnomeCave();
+            default -> {
+                typeWriter("Invalid input.");
+                GnomeBank();
+            }
+        }
+    }
+
+    static void SellAllOres() {
+
+        int totalMoney = 0;
+
+        totalMoney += Coal * 5;
+        totalMoney += Iron * 10;
+        totalMoney += Gold * 20;
+        totalMoney += Obsidian * 30;
+        totalMoney += Amethyst * 40;
+        totalMoney += Diamond * 50;
+        totalMoney += Ruby * 100;
+
+
+        if (totalMoney == 0) {
+            System.out.println("You have no ores to sell.");
+            GnomeTown();
+            return;
+        }
+
+
+        System.out.println("You sold your ores for " + totalMoney + " coins!");
+
+
+        p.Money += totalMoney;
+
+
+        // Empty inventory after selling
+        Coal = 0;
+        Iron = 0;
+        Gold = 0;
+        Obsidian = 0;
+        Amethyst = 0;
+        Diamond = 0;
+        Ruby = 0;
+
+
+        System.out.println("You now have " + p.Money + " coins.");
+        GnomeTown();
+
     }
 
 
@@ -1649,7 +2475,7 @@ public class Main {
 
             System.out.println("\nBreeze defeated!");
 
-            if (ThreadLocalRandom.current().nextInt(100) < 10) {
+            if (ThreadLocalRandom.current().nextInt(100 + 1) < 10) {
                 System.out.println("The Breeze dropped a heart");
                 p.BreezeHearts += 1;
                 if (p.BreezeHearts == 5) {
