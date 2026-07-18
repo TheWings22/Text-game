@@ -113,7 +113,7 @@ public class Main {
             System.out.flush();
 
             try {
-                Thread.sleep(35); // adjust speed here
+                Thread.sleep(0); // adjust speed here
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
@@ -769,13 +769,16 @@ public class Main {
 
         for (int i = 0; i < Hunters; i++) {
 
-            int HeavyAttack = 1;
+            int HeavyAttack = 0;
 
             int CrystalHuntersHP = enemy.CrystalHunters;
 
             System.out.println("\nFighting Hunter " + (i + 1));
 
             while (CrystalHuntersHP > 0) {
+
+                HeavyAttack++;
+
 
                 System.out.println("Crystal HP: " + CrystalHuntersHP +
                         " | Your HP: " + String.format("%.1f", p.health));
@@ -824,7 +827,7 @@ public class Main {
 
                     }
 
-                    HeavyAttack = 1;
+                    HeavyAttack = 0;
 
                 }
                 else {
@@ -860,7 +863,6 @@ public class Main {
                     }
                 }
 
-                HeavyAttack++;
                 checkHealth();
 
 
