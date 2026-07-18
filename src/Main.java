@@ -146,7 +146,7 @@ public class Main {
             System.out.flush();
 
             try {
-                Thread.sleep(0); // adjust speed here
+                Thread.sleep(35); // adjust speed here
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
