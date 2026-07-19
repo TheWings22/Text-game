@@ -62,8 +62,6 @@ public class Main {
 
     static volatile boolean pressed = false;
     static volatile boolean Minepressed = false;
-    static boolean accuracyRunning = false;
-    static boolean accuracyMining = false;
     static boolean miningExit = false;
 
     static boolean EastAccess = true;
@@ -89,11 +87,7 @@ public class Main {
     static int pickaxeLuck = 0;
     static int pickaxeTier = 0;
 
-    static boolean IronPik = true;
-    static boolean GoldPik = true;
-    static boolean DiamondPik = true;
-    static boolean RubyPik = true;
-    static boolean EmeraldPik = true;
+
     static boolean CharoitePik = true;
 
     static int totalTraining = 0;
@@ -108,7 +102,7 @@ public class Main {
         p.baseDamage = Math.max(1, (int) (p.level * 0.3));
         p.damage = p.baseDamage + p.bonusDamage + (int) Math.ceil(p.DamageAccuracyBonus);
 
-        p.baseDefense = (int) (p.level * 0.2);
+        p.baseDefense = Math.max(1, (int) (p.level * 0.2));
         p.defense = p.baseDefense + p.bonusDefense;
 
 
@@ -146,13 +140,14 @@ public class Main {
             System.out.flush();
 
             try {
-                Thread.sleep(35); // adjust speed here
+                Thread.sleep(0); // adjust speed here
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
         }
         System.out.println();
     }
+
     //endregion
 
 
@@ -243,15 +238,15 @@ public class Main {
 
     private static void Room1Explore() {
 
-        typeWriter("The room is adored in renaissance celestial imagery. Rich blue walls and shimmering golden stars \n" +
-                "On the back wall lies a small soft flowing waterfall");
+        typeWriter("The walls are old stone walls you see in castles. Royal red carpets cover the floor \n" +
+                "On the back wall knights suite of armor lined up on the wall");
         Room1Statue();
     }
 
     private static void Room1Statue() {
-        typeWriter("The statue is of a beautiful silver women, on it a sign reads");
-        typeWriter("\" I watch from the heavens, guiding all lost souls under the coven of night.\" \n" +
-                "\"I come and go, appear and disappear, as I push and pull the oceans\" \n" +
+        typeWriter("The statue is king. Holding a deck of cards in each hand, the sign reads");
+        typeWriter("\"I am the king of spades, and the king of clubs, I am one of a kind and never repeated. I am adorned in diamonds and have a heart of gold \" \n" +
+                "\"I raise my cup for new begins, cut at judgment with my sword, give coins to my people and raise my wand to creativity\" \n" +
                 "What number am I?");
         IvoryHall();
     }
@@ -375,7 +370,7 @@ public class Main {
 
     private static void Room6Statue() {
 
-        typeWriter("The statue is a handsome man in a suit, a hat covering his face, a comedy mask hanging from his fingers, he sign reads");
+        typeWriter("The statue is a handsome man in a suit, a hat covering his face, a comedy mask hanging from his fingers, the sign reads");
         typeWriter("\"I cast the dice of fate, I laugh at the face of sadness and cry at the face of laughter, I am elation and I am chance\"\n" +
                 "\"What side of dice you'll get who knows?\" What number am I? ");
         IvoryHall();
@@ -509,12 +504,12 @@ public class Main {
 //region Main Area
 
     static void mainArea() {
-
+        updateStats();
         System.out.println("\n**********************************************\n");
 
         System.out.println("Current Money is: " + p.Money + " Current Heath: " + p.health + " Current Crystals: " + p.crystals + "\n" +
-                " Level: " + p.level + " Damage: " + p.damage + " Your Defense: " + p.defense + " Your magic level is " + p.Magic);
-        typeWriter("To the north you have the crystal cave \n" +
+                "Level: " + p.level + " Damage: " + p.damage + " Your Defense: " + p.defense + " Your magic level is " + p.Magic);
+        typeWriter("To the north you have the snowy crystal cave \n" +
                 "To the east you have the land of wind \n" +
                 "To the south is the endless abyss \n" +
                 "And to the west is the enchanted forest \n" +
@@ -1517,6 +1512,284 @@ public class Main {
 
     }
 
+    static void GnomeTown() {
+        typeWriter("You enter the town center, gnomes trotting around, you saw 2 shops, a bank to cash your gems and a mining store to upgrade your pickaxe");
+        System.out.println("| B Bank | P Pickaxe | H Head back | I inventory");
+        char Input = input.next().charAt(0);
+        input.nextLine();
+        switch (Input) {
+            case 'B', 'b' -> GnomeBank();
+            case 'P', 'p' -> GnomeShop();
+            case 'H', 'h' -> GnomeCave();
+            case 'I', 'i' -> {
+                System.out.println("Coal: " + Coal + "\n" + "" +
+                        "Iron: " + Iron + "\n" +
+                        "Gold: " + Gold + "\n" +
+                        "Obsidian: " + Obsidian + "\n" +
+                        "Amethyst: " + Amethyst + "\n" +
+                        "Diamond: " + Diamond + "\n" +
+                        "Ruby: " + Ruby);
+                GnomeMines();
+            }
+            default -> {
+                typeWriter("Invalid input.");
+                GnomeTown();
+            }
+        }
+    }
+
+    static void GnomeShop() {
+
+        typeWriter("Welcome, would you like a new pickaxe?");
+        System.out.println("Your money is: " + p.Money);
+        System.out.println("Available pickaxe");
+        System.out.println("1 | Iron Pickaxe: 50$ + 10 luck boost\n" +
+                "2 | Golden Pickaxe: 100$ + 15 luck boost\n" +
+                "3 | Diamond Pickaxe: 200$ + 20 luck boost\n" +
+                "4 | Ruby Pickaxe: 250$ + 25 luck boost\n" +
+                "5 | Emerald Pickaxe: 350$ + 30 luck boost\n" +
+                "6 | Charoite Pickaxe: 1000$ + 100 luck boost");
+        System.out.println("Please enter which pickaxe you want or | E to go back");
+        char Input = input.next().charAt(0);
+        switch (Input) {
+            case 'E', 'e' -> {
+                GnomeTown();
+            }
+            case '1' -> { // Iron Pickaxe
+
+                if (pickaxeTier < 1) {
+
+                    if (p.Money >= 50) {
+
+                        p.Money -= 50;
+                        pickaxeLuck = 10;
+                        pickaxeTier = 1;
+
+                        typeWriter("You bought the Iron pickaxe");
+                        GnomeShop();
+
+                    } else {
+
+                        typeWriter("You don't have enough money");
+                        GnomeShop();
+
+                    }
+
+                } else {
+
+                    typeWriter("You already own this or a better pickaxe.");
+                    GnomeShop();
+
+                }
+            }
+
+
+            case '2' -> { // Golden Pickaxe
+
+                if (pickaxeTier < 2) {
+
+                    if (p.Money >= 100) {
+
+                        p.Money -= 100;
+                        pickaxeLuck = 15;
+                        pickaxeTier = 2;
+
+                        typeWriter("You bought the Golden pickaxe");
+                        GnomeShop();
+
+                    } else {
+
+                        typeWriter("You don't have enough money");
+                        GnomeShop();
+
+                    }
+
+                } else {
+
+                    typeWriter("You already own this or a better pickaxe.");
+                    GnomeShop();
+
+                }
+            }
+
+
+            case '3' -> { // Diamond Pickaxe
+
+                if (pickaxeTier < 3) {
+
+                    if (p.Money >= 200) {
+
+                        p.Money -= 200;
+                        pickaxeLuck = 20;
+                        pickaxeTier = 3;
+
+                        typeWriter("You bought the Diamond pickaxe");
+                        GnomeShop();
+
+                    } else {
+
+                        typeWriter("You don't have enough money");
+                        GnomeShop();
+
+                    }
+
+                } else {
+
+                    typeWriter("You already own this or a better pickaxe.");
+                    GnomeShop();
+
+                }
+            }
+
+
+            case '4' -> { // Ruby Pickaxe
+
+                if (pickaxeTier < 4) {
+
+                    if (p.Money >= 250) {
+
+                        p.Money -= 250;
+                        pickaxeLuck = 25;
+                        pickaxeTier = 4;
+
+                        typeWriter("You bought the Ruby pickaxe");
+                        GnomeShop();
+
+                    } else {
+
+                        typeWriter("You don't have enough money");
+                        GnomeShop();
+
+                    }
+
+                } else {
+
+                    typeWriter("You already own this or a better pickaxe.");
+                    GnomeShop();
+
+                }
+            }
+
+
+            case '5' -> { // Emerald Pickaxe
+
+                if (pickaxeTier < 5) {
+
+                    if (p.Money >= 350) {
+
+                        p.Money -= 350;
+                        pickaxeLuck = 30;
+                        pickaxeTier = 5;
+
+                        typeWriter("You bought the Emerald pickaxe");
+                        GnomeShop();
+
+                    } else {
+
+                        typeWriter("You don't have enough money");
+                        GnomeShop();
+
+                    }
+
+                } else {
+
+                    typeWriter("You already own this or a better pickaxe.");
+                    GnomeShop();
+
+                }
+            }
+
+            case '6' -> {
+                if (CharoitePik) {
+                    if (p.Money >= 1000) {
+                        p.Money -= 1000;
+                        typeWriter("You held the Charoite pickaxe feeling it's power. You existed the shop to go tested out\n" +
+                                "But before you made it 5 feet from the shop, the pickaxe shattered because Charoite if fragile\n" +
+                                "As you stare at the broken pieces, you can hear the shopkeeper snickering");
+                        CharoitePik = false;
+                        GnomeTown();
+                    } else {
+                        typeWriter("You don't have enough money");
+                        GnomeShop();
+                    }
+                } else {
+                    typeWriter("Item is sold out.... Hehe");
+                    GnomeShop();
+                }
+            }
+            default -> {
+                typeWriter("Invalid input.");
+                GnomeShop();
+            }
+        }
+    }
+
+    static void GnomeBank() {
+        typeWriter("Welcome, would you like to cash in your gems?");
+        System.out.println("Gem prices" + "\n" +
+                "Coal: 5$\n" +
+                "Iron: 10$\n" +
+                "Gold: 20$\n" +
+                "Obsidian: 30$\n" +
+                "Amethyst: 40$\n" +
+                "Diamond: 50$\n" +
+                "Ruby: 100$");
+        System.out.println("| 1 to cash in | 2 head back");
+        int chouce = input.nextInt();
+        switch (chouce) {
+            case 1 -> {
+                SellAllOres();
+            }
+            case 2 -> GnomeCave();
+            default -> {
+                typeWriter("Invalid input.");
+                GnomeBank();
+            }
+        }
+    }
+
+    static void SellAllOres() {
+
+        int totalMoney = 0;
+
+        totalMoney += Coal * 5;
+        totalMoney += Iron * 10;
+        totalMoney += Gold * 20;
+        totalMoney += Obsidian * 30;
+        totalMoney += Amethyst * 40;
+        totalMoney += Diamond * 50;
+        totalMoney += Ruby * 100;
+
+
+        if (totalMoney == 0) {
+            System.out.println("You have no ores to sell.");
+            GnomeTown();
+            return;
+        }
+
+
+        System.out.println("You sold your ores for " + totalMoney + " coins!");
+
+
+        p.Money += totalMoney;
+
+
+        // Empty inventory after selling
+        Coal = 0;
+        Iron = 0;
+        Gold = 0;
+        Obsidian = 0;
+        Amethyst = 0;
+        Diamond = 0;
+        Ruby = 0;
+
+
+        System.out.println("You now have " + p.Money + " coins.");
+        GnomeTown();
+
+    }
+
+
     static void GnomeChief() {
         typeWriter("You head up the grand tower, the chief gnome on his throne. But above him is the North crystal, he catches you eyeing it and laughs");
         typeWriter("\"Pretty isn't it? found it at the top of the icy mounts. If you want it, well, give me 100,000$ and it's yours. Otherwise it's mine");
@@ -1815,7 +2088,7 @@ public class Main {
 
                 typeWriter("Gnome dropped 100000 coins");
 
-                typeWriter("The gnome tribe kicked you out, but before that you managed to snag the real north crystal");
+                typeWriter("The gnome tribe kicked you out, but before that you managed to snag the real ice crystal");
                 p.crystals += 1;
                 p.level += 10;
                 North = true;
@@ -1831,293 +2104,13 @@ public class Main {
     }
 
     static void GnomeMercy() {
-        typeWriter("You laid your sword down. The chief gnome scrambled away, after a while he came back handing you the true north crystal before running away");
+        typeWriter("You laid your sword down. The chief gnome scrambled away, after a while he came back handing you the true ice crystal before running away");
         p.crystals += 1;
         p.level += 10;
         North = true;
         EastAccess = false;
         mainArea();
     }
-
-
-    static void GnomeTown() {
-        typeWriter("You enter the town center, gnomes trotting around, you saw 2 shops, a bank to cash your gems and a mining store to upgrade your pickaxe");
-        System.out.println("| B Bank | P Pickaxe | H Head back | I inventory");
-        char Input = input.next().charAt(0);
-        input.nextLine();
-        switch (Input) {
-            case 'B', 'b' -> GnomeBank();
-            case 'P', 'p' -> GnomeShop();
-            case 'H', 'h' -> GnomeCave();
-            case 'I', 'i' -> {
-                System.out.println("Coal: " + Coal + "\n" + "" +
-                        "Iron: " + Iron + "\n" +
-                        "Gold: " + Gold + "\n" +
-                        "Obsidian: " + Obsidian + "\n" +
-                        "Amethyst: " + Amethyst + "\n" +
-                        "Diamond: " + Diamond + "\n" +
-                        "Ruby: " + Ruby);
-                GnomeMines();
-            }
-            default -> {
-                typeWriter("Invalid input.");
-                GnomeTown();
-            }
-        }
-    }
-
-    static void GnomeShop() {
-
-        typeWriter("Welcome, would you like a new pickaxe?");
-        System.out.println("Your money is: " + p.Money);
-        System.out.println("Available pickaxe");
-        System.out.println("1 | Iron Pickaxe: 50$ + 10 luck boost\n" +
-                "2 | Golden Pickaxe: 100$ + 15 luck boost\n" +
-                "3 | Diamond Pickaxe: 200$ + 20 luck boost\n" +
-                "4 | Ruby Pickaxe: 250$ + 25 luck boost\n" +
-                "5 | Emerald Pickaxe: 350$ + 30 luck boost\n" +
-                "6 | Charoite Pickaxe: 1000$ + 100 luck boost");
-        System.out.println("Please enter which pickaxe you want or | E to go back");
-        char Input = input.next().charAt(0);
-        switch (Input) {
-            case 'E', 'e' -> {
-                GnomeTown();
-            }
-            case '1' -> { // Iron Pickaxe
-
-                if (pickaxeTier < 1) {
-
-                    if (p.Money >= 50) {
-
-                        p.Money -= 50;
-                        pickaxeLuck = 10;
-                        pickaxeTier = 1;
-
-                        typeWriter("You bought the Iron pickaxe");
-                        GnomeShop();
-
-                    } else {
-
-                        typeWriter("You don't have enough money");
-                        GnomeShop();
-
-                    }
-
-                } else {
-
-                    typeWriter("You already own this or a better pickaxe.");
-                    GnomeShop();
-
-                }
-            }
-
-
-            case '2' -> { // Golden Pickaxe
-
-                if (pickaxeTier < 2) {
-
-                    if (p.Money >= 100) {
-
-                        p.Money -= 100;
-                        pickaxeLuck = 15;
-                        pickaxeTier = 2;
-
-                        typeWriter("You bought the Golden pickaxe");
-                        GnomeShop();
-
-                    } else {
-
-                        typeWriter("You don't have enough money");
-                        GnomeShop();
-
-                    }
-
-                } else {
-
-                    typeWriter("You already own this or a better pickaxe.");
-                    GnomeShop();
-
-                }
-            }
-
-
-            case '3' -> { // Diamond Pickaxe
-
-                if (pickaxeTier < 3) {
-
-                    if (p.Money >= 200) {
-
-                        p.Money -= 200;
-                        pickaxeLuck = 20;
-                        pickaxeTier = 3;
-
-                        typeWriter("You bought the Diamond pickaxe");
-                        GnomeShop();
-
-                    } else {
-
-                        typeWriter("You don't have enough money");
-                        GnomeShop();
-
-                    }
-
-                } else {
-
-                    typeWriter("You already own this or a better pickaxe.");
-                    GnomeShop();
-
-                }
-            }
-
-
-            case '4' -> { // Ruby Pickaxe
-
-                if (pickaxeTier < 4) {
-
-                    if (p.Money >= 250) {
-
-                        p.Money -= 250;
-                        pickaxeLuck = 25;
-                        pickaxeTier = 4;
-
-                        typeWriter("You bought the Ruby pickaxe");
-                        GnomeShop();
-
-                    } else {
-
-                        typeWriter("You don't have enough money");
-                        GnomeShop();
-
-                    }
-
-                } else {
-
-                    typeWriter("You already own this or a better pickaxe.");
-                    GnomeShop();
-
-                }
-            }
-
-
-            case '5' -> { // Emerald Pickaxe
-
-                if (pickaxeTier < 5) {
-
-                    if (p.Money >= 350) {
-
-                        p.Money -= 350;
-                        pickaxeLuck = 30;
-                        pickaxeTier = 5;
-
-                        typeWriter("You bought the Emerald pickaxe");
-                        GnomeShop();
-
-                    } else {
-
-                        typeWriter("You don't have enough money");
-                        GnomeShop();
-
-                    }
-
-                } else {
-
-                    typeWriter("You already own this or a better pickaxe.");
-                    GnomeShop();
-
-                }
-            }
-
-            case '6' -> {
-                if (CharoitePik) {
-                    if (p.Money >= 1000) {
-                        p.Money -= 1000;
-                        typeWriter("You held the Charoite pickaxe feeling it's power. You existed the shop to go tested out\n" +
-                                "But before you made it 5 feet from the shop, the pickaxe shattered because Charoite if fragile\n" +
-                                "As you stare at the broken pieces, you can hear the shopkeeper snickering");
-                        CharoitePik = false;
-                        GnomeTown();
-                    } else {
-                        typeWriter("You don't have enough money");
-                        GnomeShop();
-                    }
-                } else {
-                    typeWriter("Item is sold out.... Hehe");
-                    GnomeShop();
-                }
-            }
-            default -> {
-                typeWriter("Invalid input.");
-                GnomeShop();
-            }
-        }
-    }
-
-    static void GnomeBank() {
-        typeWriter("Welcome, would you like to cash in your gems?");
-        System.out.println("Gem prices" + "\n" +
-                "Coal: 5$\n" +
-                "Iron: 10$\n" +
-                "Gold: 20$\n" +
-                "Obsidian: 30$\n" +
-                "Amethyst: 40$\n" +
-                "Diamond: 50$\n" +
-                "Ruby: 100$");
-        System.out.println("| 1 to cash in | 2 head back");
-        int chouce = input.nextInt();
-        switch (chouce) {
-            case 1 -> {
-                SellAllOres();
-            }
-            case 2 -> GnomeCave();
-            default -> {
-                typeWriter("Invalid input.");
-                GnomeBank();
-            }
-        }
-    }
-
-    static void SellAllOres() {
-
-        int totalMoney = 0;
-
-        totalMoney += Coal * 5;
-        totalMoney += Iron * 10;
-        totalMoney += Gold * 20;
-        totalMoney += Obsidian * 30;
-        totalMoney += Amethyst * 40;
-        totalMoney += Diamond * 50;
-        totalMoney += Ruby * 100;
-
-
-        if (totalMoney == 0) {
-            System.out.println("You have no ores to sell.");
-            GnomeTown();
-            return;
-        }
-
-
-        System.out.println("You sold your ores for " + totalMoney + " coins!");
-
-
-        p.Money += totalMoney;
-
-
-        // Empty inventory after selling
-        Coal = 0;
-        Iron = 0;
-        Gold = 0;
-        Obsidian = 0;
-        Amethyst = 0;
-        Diamond = 0;
-        Ruby = 0;
-
-
-        System.out.println("You now have " + p.Money + " coins.");
-        GnomeTown();
-
-    }
-
-
 //endregion
 
 
@@ -2832,9 +2825,9 @@ public class Main {
                 "\"And here is a little bonus\"");
         p.WindRing += 1;
         p.health = 100;
-        p.bonusDamage += 20;
-        p.bonusDefense += 20;
-        p.Magic += 20;
+        p.bonusDamage += 10;
+        p.bonusDefense += 10;
+        p.Magic += 10;
         updateStats();
 
         StormCloud = true;
@@ -2953,9 +2946,10 @@ public class Main {
 
         typeWriter("You have defeated Aeolus, the wind god");
         typeWriter("Aeolus: \"Ugh, take it. I have better things to waist my powers on\"");
+        typeWriter("Wind crystal was added to your inventory");
         p.crystals += 1;
-        p.level += 20;
-        p.bonusDefense += 20;
+        p.level += 10;
+        p.bonusDefense += 10;
         p.health = 100;
         East = true;
         SouthAccess = false;
