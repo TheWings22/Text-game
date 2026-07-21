@@ -17,6 +17,14 @@ public class SoundManager {
 
             URL url = SoundManager.class.getResource(path);
 
+            System.out.println("Looking for: " + path);
+            System.out.println("URL: " + url);
+
+            if (url == null) {
+                System.out.println("Music not found!");
+                return;
+            }
+
             AudioInputStream audio = AudioSystem.getAudioInputStream(url);
 
             musicClip = AudioSystem.getClip();
@@ -36,6 +44,8 @@ public class SoundManager {
             musicClip.close();
         }
     }
+
+
 
     // Plays a sound effect
     public static void playSFX(String path) {

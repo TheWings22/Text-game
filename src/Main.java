@@ -688,6 +688,7 @@ public class Main {
                 SoundManager.stopMusic();
                 Tutorial();
             }
+            default: TutorialAsk();
         }
     }
 
@@ -698,7 +699,6 @@ public class Main {
         typeWriter("You stood in front the dummy raising your sword \"When fighting, try to hit when the timer is close to 0.00  to get damage bonus\"");
         typeWriter("Enter any button to continue");
         char enter = input.next().charAt(0);
-        input.nextLine();
 
 
         SoundManager.stopMusic();
@@ -764,7 +764,7 @@ public class Main {
                         break;
                     case "3":
 
-                        p.health += 5;
+                        p.health += (p.Healing/2);
                         if (p.health > 100) {
                             p.health = 100;
                         }
@@ -1853,7 +1853,7 @@ public class Main {
                             break;
                         case "3":
 
-                            p.health += p.Healing;
+                            p.health += (p.Healing/2);
                             if (p.health > 100) {
                                 p.health = 100;
                             }
